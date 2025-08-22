@@ -6,18 +6,18 @@
 
 @layer base {
   body {
-    @apply bg-neutral-50 text-neutral-900 font-sans;
+    @apply bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 font-sans;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
   
   * {
-    @apply border-neutral-200;
+    @apply border-neutral-200 dark:border-neutral-700;
   }
 }
 
 @layer components {
   .card {
-    @apply bg-white rounded-xl shadow-enterprise border border-neutral-200/60 p-6 backdrop-blur-sm;
+    @apply bg-white dark:bg-neutral-800 rounded-xl shadow-enterprise border border-neutral-200/60 dark:border-neutral-700/60 p-6 backdrop-blur-sm;
   }
   
   .card-hover {
@@ -37,15 +37,15 @@
   }
   
   .metric-card {
-    @apply bg-gradient-to-br from-white to-neutral-50/50 rounded-xl shadow-enterprise border border-neutral-200/60 p-6 backdrop-blur-sm hover:shadow-enterprise-lg transition-all duration-300;
+    @apply bg-gradient-to-br from-white dark:from-neutral-800 to-neutral-50/50 dark:to-neutral-700/50 rounded-xl shadow-enterprise border border-neutral-200/60 dark:border-neutral-700/60 p-6 backdrop-blur-sm hover:shadow-enterprise-lg transition-all duration-300;
   }
   
   .chart-container {
-    @apply bg-white rounded-xl shadow-enterprise border border-neutral-200/60 p-6 backdrop-blur-sm;
+    @apply bg-white dark:bg-neutral-800 rounded-xl shadow-enterprise border border-neutral-200/60 dark:border-neutral-700/60 p-6 backdrop-blur-sm;
   }
   
   .period-selector {
-    @apply bg-white rounded-lg shadow-sm border border-neutral-200/60 p-1;
+    @apply bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200/60 dark:border-neutral-700/60 p-1;
   }
   
   .period-button {
@@ -57,11 +57,11 @@
   }
   
   .period-button-inactive {
-    @apply text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100;
+    @apply text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700;
   }
 
   .metric-selector {
-    @apply bg-white rounded-lg shadow-sm border border-neutral-200/60 p-1;
+    @apply bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200/60 dark:border-neutral-700/60 p-1;
   }
 
   .modal-overlay {
@@ -69,7 +69,7 @@
   }
 
   .modal-content {
-    @apply bg-white rounded-2xl shadow-enterprise-xl p-8 max-w-2xl w-full mx-4;
+    @apply bg-white dark:bg-neutral-800 rounded-2xl shadow-enterprise-xl p-8 max-w-2xl w-full mx-4;
   }
 
   .control-button {
@@ -81,11 +81,11 @@
   }
 
   .control-button-inactive {
-    @apply bg-neutral-100 text-neutral-700 hover:bg-neutral-200;
+    @apply bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-600;
   }
 
   .performance-card {
-    @apply bg-white rounded-lg p-4 border border-neutral-200/60 hover:shadow-enterprise-lg transition-all duration-300;
+    @apply bg-white dark:bg-neutral-800 rounded-lg p-4 border border-neutral-200/60 dark:border-neutral-700/60 hover:shadow-enterprise-lg transition-all duration-300;
   }
 
   .performance-bar {
@@ -101,23 +101,23 @@
   }
 
   .chart-control-button {
-    @apply p-2 text-neutral-600 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2;
+    @apply p-2 text-neutral-600 dark:text-neutral-400 hover:text-accent-600 hover:bg-accent-50 dark:hover:bg-accent-900/20 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800;
   }
 
   .export-dropdown {
-    @apply absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-enterprise-xl border border-neutral-200/60 z-50;
+    @apply absolute top-full right-0 mt-2 w-48 bg-white dark:bg-neutral-800 rounded-lg shadow-enterprise-xl border border-neutral-200/60 dark:border-neutral-700/60 z-50;
   }
 
   .export-option {
-    @apply w-full flex items-center gap-3 px-3 py-2 text-sm text-neutral-700 hover:bg-accent-50 hover:text-accent-700 rounded-md transition-colors duration-200;
+    @apply w-full flex items-center gap-3 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-accent-50 dark:hover:bg-accent-900/20 hover:text-accent-700 rounded-md transition-colors duration-200;
   }
   
   .stat-value {
-    @apply text-3xl font-bold text-neutral-900 tracking-tight;
+    @apply text-3xl font-bold text-neutral-900 dark:text-neutral-100 tracking-tight;
   }
   
   .stat-label {
-    @apply text-sm font-medium text-neutral-600 uppercase tracking-wide;
+    @apply text-sm font-medium text-neutral-600 dark:text-neutral-400 uppercase tracking-wide;
   }
   
   .trend-indicator {
@@ -125,19 +125,19 @@
   }
   
   .trend-positive {
-    @apply bg-success-100 text-success-800;
+    @apply bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-200;
   }
   
   .trend-negative {
-    @apply bg-danger-100 text-danger-800;
+    @apply bg-danger-100 dark:bg-danger-900/30 text-danger-800 dark:text-danger-200;
   }
   
   .activity-item {
-    @apply flex items-center justify-between py-3 border-b border-neutral-100 last:border-b-0 hover:bg-neutral-50/50 rounded-lg px-2 transition-colors duration-200;
+    @apply flex items-center justify-between py-3 border-b border-neutral-100 dark:border-neutral-700 last:border-b-0 hover:bg-neutral-50/50 dark:hover:bg-neutral-700/50 rounded-lg px-2 transition-colors duration-200;
   }
   
   .chart-title {
-    @apply text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2;
+    @apply text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4 flex items-center gap-2;
   }
   
   .metric-icon {

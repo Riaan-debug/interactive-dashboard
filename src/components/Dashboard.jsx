@@ -31,7 +31,9 @@ import {
   ZoomOut,
   RotateCcw,
   FileText,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Moon,
+  Sun
 } from 'lucide-react'
 
 // Import export libraries
@@ -108,9 +110,17 @@ const Dashboard = () => {
   const [isExporting, setIsExporting] = useState(false)
   const [showExportOptions, setShowExportOptions] = useState(false)
   const [performanceMetrics, setPerformanceMetrics] = useState({ fps: 60, renderTime: 0 })
+  const [theme, setTheme] = useState('light')
   // Refs for chart instances and performance monitoring
   const chartRefs = useRef({})
   const performanceRef = useRef(null)
+
+  // Theme management
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('dashboard-theme') || 'light'
+    setTheme(savedTheme)
+    document.documentElement.classList.toggle('dark', savedTheme === 'dark')
+  }, [])
 
   // Trigger animations after component mounts
   useEffect(() => {
@@ -121,6 +131,14 @@ const Dashboard = () => {
       clearTimeout(chartTimer)
     }
   }, [])
+
+  // Theme toggle function
+  const toggleTheme = useCallback(() => {
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    setTheme(newTheme)
+    localStorage.setItem('dashboard-theme', newTheme)
+    document.documentElement.classList.toggle('dark', newTheme === 'dark')
+  }, [theme])
 
   // Custom hook for smooth counting animations
   const useCountUp = (endValue, duration = 2000, delay = 0) => {
@@ -963,17 +981,32 @@ const Dashboard = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-neutral-100/50">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-neutral-100/50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8 animate-fade-in">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 bg-accent-100 rounded-lg">
-              <BarChart3 className="h-6 w-6 text-accent-600" />
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-accent-100 rounded-lg">
+                <BarChart3 className="h-6 w-6 text-accent-600" />
+              </div>
+                             <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100 tracking-tight">Analytics Dashboard</h1>
             </div>
-            <h1 className="text-3xl font-bold text-neutral-900 tracking-tight">Analytics Dashboard</h1>
+            
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-3 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 rounded-lg transition-all duration-300 hover:scale-105"
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            >
+              {theme === 'light' ? (
+                <Moon className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
+              ) : (
+                <Sun className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
+              )}
+            </button>
           </div>
-                     <p className="text-neutral-600 text-lg">Comprehensive business intelligence and performance analytics dashboard</p>
+                     <p className="text-neutral-600 dark:text-neutral-400 text-lg">Comprehensive business intelligence and performance analytics dashboard</p>
         </div>
 
         {/* Period Selector */}
@@ -999,7 +1032,7 @@ const Dashboard = () => {
         <div className="mb-6 animate-slide-up" style={{ animationDelay: '100ms' }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <span className="text-sm font-medium text-neutral-600">View by:</span>
+                             <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">View by:</span>
               <div className="metric-selector w-fit">
                 {[
                   { key: 'revenue', label: 'Revenue (R)' },
@@ -1167,59 +1200,59 @@ const Dashboard = () => {
                        </div>
                      </div>
                      
-                                           <div className="h-80 relative">
-                        {showDrillDown ? (
-                                                     <Line 
-                                                           ref={(el) => { 
-                                if (el) {
-                                  chartRefs.current.mainChart = el
-                                }
-                              }}
-                             data={multiMetricData} 
-                             options={multiMetricOptions} 
-                                                           onClick={(event, elements) => {
-                                if (elements.length > 0) {
-                                  // Rate limiting for chart interactions
-                                  if (!rateLimit('chart-interaction')) {
-                                    console.warn('Chart interaction rate limit exceeded')
-                                    return
-                                  }
-                                  
-                                  const dataIndex = elements[0].index
-                                  const datasetIndex = elements[0].datasetIndex
-                                  const value = multiMetricData.datasets[datasetIndex].data[dataIndex]
-                                  const label = multiMetricData.labels[dataIndex]
-                                  const metric = multiMetricData.datasets[datasetIndex].label
-                                  
-                                  // Validate and sanitize data before setting state
-                                  if (typeof dataIndex === 'number' && typeof datasetIndex === 'number' && 
-                                      typeof value === 'number' && typeof label === 'string' && typeof metric === 'string') {
-                                    setSelectedDataPoint({
-                                      label: sanitizeInput(label),
-                                      metric: sanitizeInput(metric),
-                                      value: value,
-                                      datasetIndex: datasetIndex
-                                    })
-                                    setShowDrillDown(true)
-                                  }
-                                }
-                              }}
-                           />
-                        ) : (
-                                                     <Line 
-                                                           ref={(el) => { 
-                                if (el) {
-                                  chartRefs.current.mainChart = el
-                                }
-                              }}
-                             data={chartData} 
-                             options={chartOptions} 
-                           />
-                        )}
-                        {!chartAnimation && (
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
-                        )}
-                      </div>
+                                                                  <div className="h-80 relative">
+                         {showDrillDown ? (
+                                                      <Line 
+                                                            ref={(el) => { 
+                                 if (el) {
+                                   chartRefs.current.mainChart = el
+                                 }
+                               }}
+                              data={multiMetricData} 
+                              options={multiMetricOptions} 
+                                                            onClick={(event, elements) => {
+                                 if (elements.length > 0) {
+                                   // Rate limiting for chart interactions
+                                   if (!rateLimit('chart-interaction')) {
+                                     console.warn('Chart interaction rate limit exceeded')
+                                     return
+                                   }
+                                   
+                                   const dataIndex = elements[0].index
+                                   const datasetIndex = elements[0].datasetIndex
+                                   const value = multiMetricData.datasets[datasetIndex].data[dataIndex]
+                                   const label = multiMetricData.labels[dataIndex]
+                                   const metric = multiMetricData.datasets[datasetIndex].label
+                                   
+                                   // Validate and sanitize data before setting state
+                                   if (typeof dataIndex === 'number' && typeof datasetIndex === 'number' && 
+                                       typeof value === 'number' && typeof label === 'string' && typeof metric === 'string') {
+                                     setSelectedDataPoint({
+                                       label: sanitizeInput(label),
+                                       metric: sanitizeInput(metric),
+                                       value: value,
+                                       datasetIndex: datasetIndex
+                                     })
+                                     setShowDrillDown(true)
+                                   }
+                                 }
+                               }}
+                            />
+                         ) : (
+                                                      <Line 
+                                                            ref={(el) => { 
+                                 if (el) {
+                                   chartRefs.current.mainChart = el
+                                 }
+                               }}
+                              data={chartData} 
+                              options={chartOptions} 
+                            />
+                         )}
+                         {!chartAnimation && (
+                           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-neutral-600/20 to-transparent animate-pulse" />
+                         )}
+                       </div>
                    </div>
 
                   {/* Revenue Chart */}
@@ -1228,12 +1261,12 @@ const Dashboard = () => {
                       <BarChart3 className="h-5 w-5 text-success-600 group-hover:scale-110 transition-transform duration-300" />
                                              Quarterly Performance
                     </h3>
-                    <div className="h-80 relative">
-                      <Bar data={barData} options={chartOptions} />
-                      {!chartAnimation && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
-                      )}
-                    </div>
+                                         <div className="h-80 relative">
+                       <Bar data={barData} options={chartOptions} />
+                       {!chartAnimation && (
+                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-neutral-600/20 to-transparent animate-pulse" />
+                       )}
+                     </div>
                   </div>
                 </div>
 
@@ -1245,24 +1278,24 @@ const Dashboard = () => {
                       <Activity className="h-5 w-5 text-warning-600 group-hover:scale-110 transition-transform duration-300" />
                                              Platform Distribution
                     </h3>
-                    <div className="h-64 mb-4 relative">
-                      <Doughnut data={doughnutData} options={chartOptions} />
-                      {!chartAnimation && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
-                      )}
-                    </div>
+                                         <div className="h-64 mb-4 relative">
+                       <Doughnut data={doughnutData} options={chartOptions} />
+                       {!chartAnimation && (
+                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-neutral-600/20 to-transparent animate-pulse" />
+                       )}
+                     </div>
                     <div className="space-y-3">
                       {deviceData.map((device, index) => {
                         const Icon = device.icon
                         const CountUpValue = useCountUp(device.value, 1500, 800 + index * 200)
                         return (
-                          <div key={index} className="flex items-center justify-between p-3 bg-neutral-50/50 rounded-lg hover:bg-neutral-100/50 transition-all duration-300 hover:scale-102">
-                            <div className="flex items-center gap-3">
-                              <Icon className={`h-4 w-4 ${device.color} transition-transform duration-300 group-hover:scale-110`} />
-                              <span className="text-sm font-medium text-neutral-700">{device.name}</span>
-                            </div>
-                            <span className="text-sm font-semibold text-neutral-900">{CountUpValue.toLocaleString()}</span>
-                          </div>
+                                                   <div key={index} className="flex items-center justify-between p-3 bg-neutral-50/50 dark:bg-neutral-700/50 rounded-lg hover:bg-neutral-100/50 dark:hover:bg-neutral-600/50 transition-all duration-300 hover:scale-102">
+                           <div className="flex items-center gap-3">
+                             <Icon className={`h-4 w-4 ${device.color} transition-transform duration-300 group-hover:scale-110`} />
+                             <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{device.name}</span>
+                           </div>
+                           <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">{CountUpValue.toLocaleString()}</span>
+                         </div>
                         )
                       })}
                     </div>
@@ -1282,17 +1315,17 @@ const Dashboard = () => {
                         { action: 'Product updated', time: '1 hour ago', amount: '', type: 'update' },
                         { action: 'Refund processed', time: '2 hours ago', amount: 'R99.00', type: 'refund' },
                       ].map((activity, index) => (
-                        <div key={index} className="activity-item hover:bg-neutral-100/70 transition-all duration-300 hover:scale-102">
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-neutral-900">{activity.action}</p>
-                            <p className="text-sm text-neutral-500">{activity.time}</p>
-                          </div>
-                          {activity.amount && (
-                            <span className="text-sm font-semibold text-neutral-900 bg-neutral-100 px-3 py-1 rounded-full hover:bg-neutral-200 transition-colors duration-300">
-                              {activity.amount}
-                            </span>
-                          )}
-                        </div>
+                                                 <div key={index} className="activity-item hover:bg-neutral-100/70 dark:hover:bg-neutral-600/70 transition-all duration-300 hover:scale-102">
+                           <div className="flex-1">
+                             <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">{activity.action}</p>
+                             <p className="text-sm text-neutral-500 dark:text-neutral-400">{activity.time}</p>
+                           </div>
+                           {activity.amount && (
+                             <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 bg-neutral-100 dark:bg-neutral-700 px-3 py-1 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors duration-300">
+                               {activity.amount}
+                             </span>
+                           )}
+                         </div>
                       ))}
                     </div>
                   </div>
@@ -1300,25 +1333,25 @@ const Dashboard = () => {
        </div>
 
        {/* Performance Monitor */}
-       <div className="mt-8 animate-slide-up" style={{ animationDelay: '400ms' }}>
-         <div className="bg-gradient-to-r from-neutral-50 to-accent-50 rounded-xl p-6 border border-neutral-200/60">
-                       <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-neutral-900">System Performance</h3>
-              <div className="flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-success-500 rounded-full animate-pulse"></div>
-                  <span className="text-neutral-600">Monitoring</span>
-                </div>
-              </div>
-            </div>
+               <div className="mt-8 animate-slide-up" style={{ animationDelay: '400ms' }}>
+          <div className="bg-gradient-to-r from-neutral-50 to-accent-50 dark:from-neutral-800 dark:to-neutral-700 rounded-xl p-6 border border-neutral-200/60 dark:border-neutral-700/60">
+                                               <div className="flex items-center justify-between mb-4">
+               <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">System Performance</h3>
+               <div className="flex items-center gap-4 text-sm">
+                 <div className="flex items-center gap-2">
+                   <div className="w-2 h-2 bg-success-500 rounded-full animate-pulse"></div>
+                   <span className="text-neutral-600 dark:text-neutral-400">Monitoring</span>
+                 </div>
+               </div>
+             </div>
            
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-             <div className="bg-white rounded-lg p-4 border border-neutral-200/60">
+                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-white dark:bg-neutral-700 rounded-lg p-4 border border-neutral-200/60 dark:border-neutral-600/60">
                <div className="flex items-center justify-between">
-                 <span className="text-sm font-medium text-neutral-600">FPS</span>
+                 <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">FPS</span>
                  <span className="text-lg font-bold text-success-600">{performanceMetrics.fps}</span>
                </div>
-               <div className="mt-2 w-full bg-neutral-200 rounded-full h-2">
+               <div className="mt-2 w-full bg-neutral-200 dark:bg-neutral-600 rounded-full h-2">
                  <div 
                    className="bg-success-500 h-2 rounded-full transition-all duration-300"
                    style={{ width: `${Math.min((performanceMetrics.fps / 60) * 100, 100)}%` }}
@@ -1326,12 +1359,12 @@ const Dashboard = () => {
                </div>
              </div>
              
-             <div className="bg-white rounded-lg p-4 border border-neutral-200/60">
+             <div className="bg-white dark:bg-neutral-700 rounded-lg p-4 border border-neutral-200/60 dark:border-neutral-600/60">
                <div className="flex items-center justify-between">
-                 <span className="text-sm font-medium text-neutral-600">Render Time</span>
+                 <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Render Time</span>
                  <span className="text-lg font-bold text-accent-600">{performanceMetrics.renderTime}ms</span>
                </div>
-               <div className="mt-2 w-full bg-neutral-200 rounded-full h-2">
+               <div className="mt-2 w-full bg-neutral-200 dark:bg-neutral-600 rounded-full h-2">
                  <div 
                    className="bg-success-500 h-2 rounded-full transition-all duration-300"
                    style={{ width: `${Math.min((performanceMetrics.renderTime / 16) * 100, 100)}%` }}
@@ -1339,14 +1372,14 @@ const Dashboard = () => {
                </div>
              </div>
              
-             <div className="bg-white rounded-lg p-4 border border-neutral-200/60">
+             <div className="bg-white dark:bg-neutral-700 rounded-lg p-4 border border-neutral-200/60 dark:border-neutral-600/60">
                <div className="flex items-center justify-between">
-                 <span className="text-sm font-medium text-neutral-600">Memory</span>
+                 <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Memory</span>
                  <span className="text-lg font-bold text-warning-600">
                    {performance.memory ? `${Math.round(performance.memory.usedJSHeapSize / 1024 / 1024)}MB` : 'N/A'}
                  </span>
                </div>
-               <div className="mt-2 w-full bg-neutral-200 rounded-full h-2">
+               <div className="mt-2 w-full bg-neutral-200 dark:bg-neutral-600 rounded-full h-2">
                  <div 
                    className="bg-success-500 h-2 rounded-full transition-all duration-300"
                    style={{ width: performance.memory ? `${Math.min((performance.memory.usedJSHeapSize / performance.memory.jsHeapSizeLimit) * 100, 100)}%` : '0%' }}
@@ -1360,9 +1393,9 @@ const Dashboard = () => {
        {/* Drill-Down Modal */}
        {showDrillDown && selectedDataPoint && (
          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
-           <div className="bg-white rounded-2xl shadow-enterprise-xl p-8 max-w-2xl w-full mx-4 animate-scale-in">
+           <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-enterprise-xl p-8 max-w-2xl w-full mx-4 animate-scale-in">
                            <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-neutral-900">Data Analysis</h3>
+                <h3 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Data Analysis</h3>
                <button
                  onClick={() => setShowDrillDown(false)}
                  className="text-neutral-400 hover:text-neutral-600 transition-colors duration-200"
@@ -1375,19 +1408,19 @@ const Dashboard = () => {
              
              <div className="space-y-6">
                <div className="grid grid-cols-2 gap-4">
-                 <div className="bg-neutral-50 rounded-lg p-4">
-                   <p className="text-sm font-medium text-neutral-600">Period</p>
-                   <p className="text-lg font-semibold text-neutral-900">{selectedDataPoint.label}</p>
+                 <div className="bg-neutral-50 dark:bg-neutral-700 rounded-lg p-4">
+                   <p className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Period</p>
+                   <p className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{selectedDataPoint.label}</p>
                  </div>
-                 <div className="bg-neutral-50 rounded-lg p-4">
-                   <p className="text-sm font-medium text-neutral-600">Metric</p>
-                   <p className="text-lg font-semibold text-neutral-900">{selectedDataPoint.metric}</p>
+                 <div className="bg-neutral-50 dark:bg-neutral-700 rounded-lg p-4">
+                   <p className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Metric</p>
+                   <p className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{selectedDataPoint.metric}</p>
                  </div>
                </div>
                
-               <div className="bg-gradient-to-r from-accent-50 to-accent-100 rounded-lg p-6">
-                 <p className="text-sm font-medium text-accent-600 mb-2">Value</p>
-                 <p className="text-3xl font-bold text-accent-900">
+               <div className="bg-gradient-to-r from-accent-50 to-accent-100 dark:from-accent-900/30 dark:to-accent-800/30 rounded-lg p-6">
+                 <p className="text-sm font-medium text-accent-600 dark:text-accent-400 mb-2">Value</p>
+                 <p className="text-3xl font-bold text-accent-900 dark:text-accent-100">
                    {selectedDataPoint.metric.includes('Revenue') || selectedDataPoint.metric.includes('Profit') 
                      ? `R${selectedDataPoint.value.toLocaleString()}` 
                      : selectedDataPoint.value.toLocaleString()}
@@ -1397,7 +1430,7 @@ const Dashboard = () => {
                <div className="flex gap-3">
                  <button
                    onClick={() => setShowDrillDown(false)}
-                   className="flex-1 bg-neutral-100 text-neutral-700 py-3 px-4 rounded-lg font-medium hover:bg-neutral-200 transition-colors duration-200"
+                   className="flex-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 py-3 px-4 rounded-lg font-medium hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors duration-200"
                  >
                    Close
                  </button>
