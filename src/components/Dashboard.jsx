@@ -40,6 +40,46 @@ import autoTable from 'jspdf-autotable'
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 
+// Security utility functions
+const sanitizeInput = (input) => {
+  if (typeof input !== 'string') return input
+  // Remove potentially dangerous characters and scripts
+  return input
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '')
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .trim()
+}
+
+const validateData = (data) => {
+  if (!data || typeof data !== 'object') return false
+  // Add more validation as needed
+  return true
+}
+
+const rateLimit = (() => {
+  const requests = new Map()
+  const maxRequests = 100 // Max requests per minute
+  const windowMs = 60000 // 1 minute window
+  
+  return (identifier) => {
+    const now = Date.now()
+    const userRequests = requests.get(identifier) || []
+    
+    // Remove old requests outside the window
+    const validRequests = userRequests.filter(time => now - time < windowMs)
+    
+    if (validRequests.length >= maxRequests) {
+      return false // Rate limited
+    }
+    
+    validRequests.push(now)
+    requests.set(identifier, validRequests)
+    return true // Allowed
+  }
+})()
+
 
 
 ChartJS.register(
@@ -222,10 +262,23 @@ const Dashboard = () => {
     }
   }, [selectedMetric])
 
-  // Enhanced export functionality
+  // Enhanced export functionality with security measures
   const exportToExcel = useCallback(async () => {
+    if (isExporting) return
+    
+    // Rate limiting check
+    if (!rateLimit('export-excel')) {
+      console.warn('Export rate limit exceeded')
+      return
+    }
+    
     setIsExporting(true)
     try {
+      // Validate data before export
+      if (!validateData(salesData[selectedPeriod])) {
+        throw new Error('Invalid data for export')
+      }
+      
       // Prepare data for Excel
       const worksheetData = []
       
@@ -233,7 +286,7 @@ const Dashboard = () => {
       const headers = ['Period', 'Revenue (R)', 'Volume', 'Profit (R)', 'Customers']
       worksheetData.push(headers)
       
-      // Add data rows
+      // Add data rows with sanitized labels
       const labels = selectedPeriod === 'week' 
         ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         : selectedPeriod === 'month'
@@ -242,7 +295,7 @@ const Dashboard = () => {
       
       labels.forEach((label, index) => {
         worksheetData.push([
-          label,
+          sanitizeInput(String(label)),
           salesData[selectedPeriod].revenue[index] || 0,
           salesData[selectedPeriod].volume[index] || 0,
           salesData[selectedPeriod].profit[index] || 0,
@@ -254,15 +307,17 @@ const Dashboard = () => {
       const workbook = XLSX.utils.book_new()
       const worksheet = XLSX.utils.aoa_to_sheet(worksheetData)
       
-      // Add worksheet to workbook
-      XLSX.utils.book_append_sheet(workbook, worksheet, `${selectedPeriod}-${selectedMetric}`)
+      // Add worksheet to workbook with sanitized name
+      const sheetName = sanitizeInput(`${selectedPeriod}-${selectedMetric}`).substring(0, 31) // Excel sheet name limit
+      XLSX.utils.book_append_sheet(workbook, worksheet, sheetName)
       
       // Generate Excel file
       const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
       const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       
-      // Download file
-      saveAs(data, `${selectedPeriod}-${selectedMetric}-data.xlsx`)
+      // Download file with sanitized filename
+      const filename = sanitizeInput(`${selectedPeriod}-${selectedMetric}-data.xlsx`)
+      saveAs(data, filename)
       
     } catch (error) {
       console.error('Excel export failed:', error)
@@ -273,18 +328,33 @@ const Dashboard = () => {
   }, [selectedPeriod, selectedMetric, salesData])
 
   const exportToPDF = useCallback(async () => {
+    if (isExporting) return
+    
+    // Rate limiting check
+    if (!rateLimit('export-pdf')) {
+      console.warn('Export rate limit exceeded')
+      return
+    }
+    
     setIsExporting(true)
     try {
+      // Validate data before export
+      if (!validateData(salesData[selectedPeriod])) {
+        throw new Error('Invalid data for export')
+      }
+      
       // Create PDF document
       const doc = new jsPDF()
       
-      // Add title
+      // Add title with sanitized text
       doc.setFontSize(20)
-      doc.text(`Analytics Dashboard Report`, 20, 20)
+      doc.text(sanitizeInput('Analytics Dashboard Report'), 20, 20)
       
-      // Add subtitle
+      // Add subtitle with sanitized text
       doc.setFontSize(14)
-      doc.text(`Period: ${selectedPeriod.charAt(0).toUpperCase() + selectedPeriod.slice(1)} | Metric: ${selectedMetric}`, 20, 35)
+      const periodText = sanitizeInput(selectedPeriod.charAt(0).toUpperCase() + selectedPeriod.slice(1))
+      const metricText = sanitizeInput(selectedMetric)
+      doc.text(`Period: ${periodText} | Metric: ${metricText}`, 20, 35)
       
       // Add summary stats
       doc.setFontSize(12)
@@ -348,8 +418,21 @@ const Dashboard = () => {
   }, [selectedPeriod, selectedMetric, salesData])
 
   const exportToJSON = useCallback(async () => {
+    if (isExporting) return
+    
+    // Rate limiting check
+    if (!rateLimit('export-json')) {
+      console.warn('Export rate limit exceeded')
+      return
+    }
+    
     setIsExporting(true)
     try {
+      // Validate data before export
+      if (!validateData(salesData[selectedPeriod])) {
+        throw new Error('Invalid data for export')
+      }
+      
       // Simulate export process
       await new Promise(resolve => setTimeout(resolve, 500))
       
@@ -359,7 +442,11 @@ const Dashboard = () => {
       const url = URL.createObjectURL(dataBlob)
       const link = document.createElement('a')
       link.href = url
-      link.download = `${selectedPeriod}-${selectedMetric}-data.json`
+      
+      // Sanitize filename
+      const filename = sanitizeInput(`${selectedPeriod}-${selectedMetric}-data.json`)
+      link.download = filename
+      
       link.click()
       URL.revokeObjectURL(url)
     } catch (error) {
@@ -1092,19 +1179,29 @@ const Dashboard = () => {
                              options={multiMetricOptions} 
                                                            onClick={(event, elements) => {
                                 if (elements.length > 0) {
+                                  // Rate limiting for chart interactions
+                                  if (!rateLimit('chart-interaction')) {
+                                    console.warn('Chart interaction rate limit exceeded')
+                                    return
+                                  }
+                                  
                                   const dataIndex = elements[0].index
                                   const datasetIndex = elements[0].datasetIndex
                                   const value = multiMetricData.datasets[datasetIndex].data[dataIndex]
                                   const label = multiMetricData.labels[dataIndex]
                                   const metric = multiMetricData.datasets[datasetIndex].label
                                   
-                                  setSelectedDataPoint({
-                                    label,
-                                    metric,
-                                    value,
-                                    datasetIndex
-                                  })
-                                  setShowDrillDown(true)
+                                  // Validate and sanitize data before setting state
+                                  if (typeof dataIndex === 'number' && typeof datasetIndex === 'number' && 
+                                      typeof value === 'number' && typeof label === 'string' && typeof metric === 'string') {
+                                    setSelectedDataPoint({
+                                      label: sanitizeInput(label),
+                                      metric: sanitizeInput(metric),
+                                      value: value,
+                                      datasetIndex: datasetIndex
+                                    })
+                                    setShowDrillDown(true)
+                                  }
                                 }
                               }}
                            />
