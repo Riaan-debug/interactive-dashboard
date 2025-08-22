@@ -1,0 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-neutral-50 text-neutral-900 font-sans;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+  
+  * {
+    @apply border-neutral-200;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl shadow-enterprise border border-neutral-200/60 p-6 backdrop-blur-sm;
+  }
+  
+  .card-hover {
+    @apply hover:shadow-enterprise-lg hover:border-neutral-300/60 transition-all duration-300;
+  }
+  
+  .btn-primary {
+    @apply bg-accent-600 hover:bg-accent-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-accent-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-medium py-2.5 px-4 rounded-lg transition-all duration-200 border border-neutral-300 hover:border-neutral-400 focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2;
+  }
+  
+  .btn-ghost {
+    @apply text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 font-medium py-2 px-3 rounded-lg transition-all duration-200;
+  }
+  
+  .metric-card {
+    @apply bg-gradient-to-br from-white to-neutral-50/50 rounded-xl shadow-enterprise border border-neutral-200/60 p-6 backdrop-blur-sm hover:shadow-enterprise-lg transition-all duration-300;
+  }
+  
+  .chart-container {
+    @apply bg-white rounded-xl shadow-enterprise border border-neutral-200/60 p-6 backdrop-blur-sm;
+  }
+  
+  .period-selector {
+    @apply bg-white rounded-lg shadow-sm border border-neutral-200/60 p-1;
+  }
+  
+  .period-button {
+    @apply px-4 py-2 rounded-md text-sm font-medium transition-all duration-200;
+  }
+  
+  .period-button-active {
+    @apply bg-accent-600 text-white shadow-sm;
+  }
+  
+  .period-button-inactive {
+    @apply text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100;
+  }
+
+  .metric-selector {
+    @apply bg-white rounded-lg shadow-sm border border-neutral-200/60 p-1;
+  }
+
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50;
+  }
+
+  .modal-content {
+    @apply bg-white rounded-2xl shadow-enterprise-xl p-8 max-w-2xl w-full mx-4;
+  }
+
+  .control-button {
+    @apply px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300;
+  }
+
+  .control-button-active {
+    @apply bg-success-600 text-white shadow-md;
+  }
+
+  .control-button-inactive {
+    @apply bg-neutral-100 text-neutral-700 hover:bg-neutral-200;
+  }
+
+  .performance-card {
+    @apply bg-white rounded-lg p-4 border border-neutral-200/60 hover:shadow-enterprise-lg transition-all duration-300;
+  }
+
+  .performance-bar {
+    @apply mt-2 w-full bg-neutral-200 rounded-full h-2 overflow-hidden;
+  }
+
+  .performance-fill {
+    @apply h-2 rounded-full transition-all duration-300;
+  }
+
+  .chart-controls {
+    @apply flex items-center gap-2;
+  }
+
+  .chart-control-button {
+    @apply p-2 text-neutral-600 hover:text-accent-600 hover:bg-accent-50 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2;
+  }
+
+  .export-dropdown {
+    @apply absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-enterprise-xl border border-neutral-200/60 z-50;
+  }
+
+  .export-option {
+    @apply w-full flex items-center gap-3 px-3 py-2 text-sm text-neutral-700 hover:bg-accent-50 hover:text-accent-700 rounded-md transition-colors duration-200;
+  }
+  
+  .stat-value {
+    @apply text-3xl font-bold text-neutral-900 tracking-tight;
+  }
+  
+  .stat-label {
+    @apply text-sm font-medium text-neutral-600 uppercase tracking-wide;
+  }
+  
+  .trend-indicator {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .trend-positive {
+    @apply bg-success-100 text-success-800;
+  }
+  
+  .trend-negative {
+    @apply bg-danger-100 text-danger-800;
+  }
+  
+  .activity-item {
+    @apply flex items-center justify-between py-3 border-b border-neutral-100 last:border-b-0 hover:bg-neutral-50/50 rounded-lg px-2 transition-colors duration-200;
+  }
+  
+  .chart-title {
+    @apply text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2;
+  }
+  
+  .metric-icon {
+    @apply p-3 rounded-xl;
+  }
+  
+  .metric-icon-sales {
+    @apply bg-gradient-to-br from-success-100 to-success-200 text-success-700;
+  }
+  
+  .metric-icon-users {
+    @apply bg-gradient-to-br from-accent-100 to-accent-200 text-accent-700;
+  }
+  
+  .metric-icon-conversion {
+    @apply bg-gradient-to-br from-warning-100 to-warning-200 text-warning-700;
+  }
+  
+  .metric-icon-orders {
+    @apply bg-gradient-to-br from-primary-100 to-primary-200 text-primary-700;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .hover\:scale-102:hover {
+    transform: scale(1.02);
+  }
+
+  .hover\:scale-105:hover {
+    transform: scale(1.05);
+  }
+
+  .hover\:scale-110:hover {
+    transform: scale(1.1);
+  }
+}
