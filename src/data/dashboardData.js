@@ -90,13 +90,33 @@ export const barData = {
       label: 'Revenue',
       data: [65, 59, 80, 81],
       backgroundColor: [
-        'rgba(59, 130, 246, 0.9)',
-        'rgba(34, 197, 94, 0.9)',
-        'rgba(245, 158, 11, 0.9)',
-        'rgba(239, 68, 68, 0.9)',
+        'rgba(59, 130, 246, 0.9)',   // Blue with opacity
+        'rgba(34, 197, 94, 0.9)',    // Green with opacity
+        'rgba(245, 158, 11, 0.9)',   // Yellow with opacity
+        'rgba(239, 68, 68, 0.9)',    // Red with opacity
       ],
+      borderColor: [
+        'rgba(59, 130, 246, 1)',     // Solid blue border
+        'rgba(34, 197, 94, 1)',      // Solid green border
+        'rgba(245, 158, 11, 1)',     // Solid yellow border
+        'rgba(239, 68, 68, 1)',      // Solid red border
+      ],
+      borderWidth: 2,
       borderRadius: 6,
       borderSkipped: false,
+      hoverBackgroundColor: [
+        'rgba(59, 130, 246, 1)',     // Solid blue on hover
+        'rgba(34, 197, 94, 1)',      // Solid green on hover
+        'rgba(245, 158, 11, 1)',     // Solid yellow on hover
+        'rgba(239, 68, 68, 1)',      // Solid red on hover
+      ],
+      hoverBorderColor: [
+        'rgba(37, 99, 235, 1)',      // Darker blue on hover
+        'rgba(22, 163, 74, 1)',      // Darker green on hover
+        'rgba(217, 119, 6, 1)',      // Darker yellow on hover
+        'rgba(220, 38, 38, 1)',      // Darker red on hover
+      ],
+      hoverBorderWidth: 3,
     },
   ],
 }

@@ -1,17 +1,5 @@
 export const handleZoomIn = (chartRefs) => {
   const chartElement = chartRefs.current.mainChart
-  
-  // Try to get the chart instance from the react-chartjs-2 wrapper
-  if (chartElement && chartElement.chartInstance) {
-    const chart = chartElement.chartInstance
-    if (chart.zoom) {
-      chart.zoom(1.2)
-      chart.update()
-      return
-    }
-  }
-  
-  // Alternative: try to access the chart directly from the wrapper
   if (chartElement && chartElement.chart) {
     const chart = chartElement.chart
     if (chart.zoom) {
@@ -20,8 +8,7 @@ export const handleZoomIn = (chartRefs) => {
       return
     }
   }
-  
-  // Last resort: try to access the Chart.js instance directly
+  // Alternative: try to access the chart directly
   if (chartElement && typeof chartElement.zoom === 'function') {
     chartElement.zoom(1.2)
     chartElement.update()
@@ -31,16 +18,6 @@ export const handleZoomIn = (chartRefs) => {
 
 export const handleZoomOut = (chartRefs) => {
   const chartElement = chartRefs.current.mainChart
-  
-  if (chartElement && chartElement.chartInstance) {
-    const chart = chartElement.chartInstance
-    if (chart.zoom) {
-      chart.zoom(0.8)
-      chart.update()
-      return
-    }
-  }
-  
   if (chartElement && chartElement.chart) {
     const chart = chartElement.chart
     if (chart.zoom) {
@@ -49,7 +26,7 @@ export const handleZoomOut = (chartRefs) => {
       return
     }
   }
-  
+  // Alternative: try to access the chart directly
   if (chartElement && typeof chartElement.zoom === 'function') {
     chartElement.zoom(0.8)
     chartElement.update()
@@ -59,16 +36,6 @@ export const handleZoomOut = (chartRefs) => {
 
 export const handleResetZoom = (chartRefs) => {
   const chartElement = chartRefs.current.mainChart
-  
-  if (chartElement && chartElement.chartInstance) {
-    const chart = chartElement.chartInstance
-    if (chart.resetZoom) {
-      chart.resetZoom()
-      chart.update()
-      return
-    }
-  }
-  
   if (chartElement && chartElement.chart) {
     const chart = chartElement.chart
     if (chart.resetZoom) {
@@ -77,7 +44,7 @@ export const handleResetZoom = (chartRefs) => {
       return
     }
   }
-  
+  // Alternative: try to access the chart directly
   if (chartElement && typeof chartElement.resetZoom === 'function') {
     chartElement.resetZoom()
     chartElement.update()

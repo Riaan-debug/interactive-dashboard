@@ -10,35 +10,43 @@ export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetri
       display: false,
     },
     tooltip: {
-      backgroundColor: 'rgba(15, 23, 42, 0.98)',
-      titleColor: '#ffffff',
-      bodyColor: '#e2e8f0',
-      borderColor: 'rgba(59, 130, 246, 0.4)',
-      borderWidth: 2,
-      cornerRadius: 12,
+      enabled: true,
+      mode: 'index',
+      intersect: false,
+      position: 'nearest',
+      backgroundColor: 'rgba(0, 0, 0, 0.9)',
+      titleColor: 'white',
+      bodyColor: 'white',
+      borderColor: 'rgba(255, 255, 255, 0.2)',
+      borderWidth: 1,
+      cornerRadius: 6,
+      padding: 10,
       displayColors: true,
-      padding: 16,
-      titleFont: {
-        size: 14,
-        weight: '600',
-      },
-      bodyFont: {
-        size: 13,
-      },
+      titleFont: { size: 14, weight: 'bold' },
+      bodyFont: { size: 12 },
+      // Enhanced callbacks for formatting
       callbacks: {
         title: (context) => {
-          const period = selectedPeriod === 'week' ? 'Daily' : selectedPeriod === 'month' ? 'Daily' : 'Monthly'
-          return `${period} ${context[0].label}`
+          return `Period: ${context[0].label}`
         },
         label: (context) => {
-          const value = context.parsed.y || context.parsed
-          const currency = selectedMetric === 'revenue' ? 'R' : ''
-          const unit = selectedMetric === 'volume' ? ' units' : ''
-          return `${context.dataset.label}: ${currency}${value.toLocaleString()}${unit}`
+          const value = context.parsed.y
+          if (selectedMetric === 'revenue') {
+            return `${context.dataset.label}: R${value.toLocaleString()}`
+          }
+          return `${context.dataset.label}: ${value.toLocaleString()}`
+        },
+        afterLabel: (context) => {
+          return ''
         }
       }
     },
     zoom: {
+      pan: {
+        enabled: true,
+        mode: 'xy',
+        speed: 20,
+      },
       zoom: {
         wheel: {
           enabled: true,
@@ -48,11 +56,6 @@ export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetri
         },
         mode: 'xy',
         speed: 0.1,
-      },
-      pan: {
-        enabled: true,
-        mode: 'xy',
-        speed: 20,
       },
       limits: {
         x: {min: 'original', max: 'original'},
@@ -64,8 +67,9 @@ export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetri
     y: {
       beginAtZero: true,
       grid: {
-        color: 'rgba(0, 0, 0, 0.04)',
+        color: 'rgba(0, 0, 0, 0.08)',
         drawBorder: false,
+        lineWidth: 1,
       },
       ticks: {
         color: '#64748b',
@@ -79,6 +83,10 @@ export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetri
           return value.toLocaleString()
         }
       },
+      border: {
+        color: 'rgba(0, 0, 0, 0.1)',
+        width: 1,
+      }
     },
     x: {
       grid: {
@@ -90,6 +98,10 @@ export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetri
           size: 12,
         },
       },
+      border: {
+        color: 'rgba(0, 0, 0, 0.1)',
+        width: 1,
+      }
     },
   },
   elements: {
@@ -106,11 +118,27 @@ export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetri
           easing: 'easeOutQuart',
         }
       }
+    },
+    bar: {
+      backgroundColor: 'rgba(59, 130, 246, 0.9)',
+      borderColor: 'rgba(59, 130, 246, 1)',
+      borderWidth: 2,
+      borderRadius: 6,
+      borderSkipped: false,
+      hoverBackgroundColor: 'rgba(59, 130, 246, 1)',
+      hoverBorderColor: 'rgba(37, 99, 235, 1)',
+      hoverBorderWidth: 3,
     }
   },
   interaction: {
     intersect: false,
     mode: 'index',
+  },
+  // Enhanced hover settings
+  hover: {
+    mode: 'index',
+    intersect: false,
+    axis: 'xy'
   },
 })
 
@@ -135,6 +163,10 @@ export const createMultiMetricOptions = (chartAnimation) => ({
       },
     },
     tooltip: {
+      enabled: true,
+      mode: 'index',
+      intersect: false,
+      position: 'nearest',
       backgroundColor: 'rgba(15, 23, 42, 0.98)',
       titleColor: '#ffffff',
       bodyColor: '#e2e8f0',
@@ -150,6 +182,7 @@ export const createMultiMetricOptions = (chartAnimation) => ({
       bodyFont: {
         size: 13,
       },
+      // Enhanced callbacks for formatting
       callbacks: {
         title: (context) => {
           const period = context[0].label.includes('week') ? 'Daily' : context[0].label.includes('month') ? 'Daily' : 'Monthly'
@@ -162,10 +195,18 @@ export const createMultiMetricOptions = (chartAnimation) => ({
             return `${dataset.label}: R${value.toLocaleString()}`
           }
           return `${dataset.label}: ${value.toLocaleString()}`
+        },
+        afterLabel: (context) => {
+          return ''
         }
       }
     },
     zoom: {
+      pan: {
+        enabled: true,
+        mode: 'xy',
+        speed: 20,
+      },
       zoom: {
         wheel: {
           enabled: true,
@@ -176,11 +217,6 @@ export const createMultiMetricOptions = (chartAnimation) => ({
         mode: 'xy',
         speed: 0.1,
       },
-      pan: {
-        enabled: true,
-        mode: 'xy',
-        speed: 20,
-      },
       limits: {
         x: {min: 'original', max: 'original'},
         y: {min: 'original', max: 'original'}
@@ -189,22 +225,25 @@ export const createMultiMetricOptions = (chartAnimation) => ({
   },
   scales: {
     y: {
-      type: 'linear',
       display: true,
       position: 'left',
       beginAtZero: true,
       grid: {
-        color: 'rgba(0, 0, 0, 0.04)',
+        color: 'rgba(0, 0, 0, 0.08)',
         drawBorder: false,
+        lineWidth: 1,
       },
       ticks: {
         color: '#64748b',
         font: { size: 12 },
         callback: (value) => `R${value.toLocaleString()}`
       },
+      border: {
+        color: 'rgba(0, 0, 0, 0.1)',
+        width: 1,
+      }
     },
     y1: {
-      type: 'linear',
       display: true,
       position: 'right',
       beginAtZero: true,
@@ -218,7 +257,6 @@ export const createMultiMetricOptions = (chartAnimation) => ({
       },
     },
     y2: {
-      type: 'linear',
       display: true,
       position: 'right',
       beginAtZero: true,
@@ -239,6 +277,10 @@ export const createMultiMetricOptions = (chartAnimation) => ({
         color: '#64748b',
         font: { size: 12 },
       },
+      border: {
+        color: 'rgba(0, 0, 0, 0.1)',
+        width: 1,
+      }
     },
   },
   elements: {
@@ -255,10 +297,26 @@ export const createMultiMetricOptions = (chartAnimation) => ({
           easing: 'easeOutQuart',
         }
       }
+    },
+    bar: {
+      backgroundColor: 'rgba(59, 130, 246, 0.9)',
+      borderColor: 'rgba(59, 130, 246, 1)',
+      borderWidth: 2,
+      borderRadius: 6,
+      borderSkipped: false,
+      hoverBackgroundColor: 'rgba(59, 130, 246, 1)',
+      hoverBorderColor: 'rgba(37, 99, 235, 1)',
+      hoverBorderWidth: 3,
     }
   },
   interaction: {
     intersect: false,
     mode: 'index',
+  },
+  // Enhanced hover settings
+  hover: {
+    mode: 'index',
+    intersect: false,
+    axis: 'xy'
   },
 })

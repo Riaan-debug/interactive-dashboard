@@ -190,3 +190,58 @@
     transform: scale(1.1);
   }
 }
+
+/* Force Chart.js tooltip visibility - Chart.js v4 classes */
+.chartjs-tooltip,
+.chartjs-tooltip-box,
+.chartjs-tooltip-body,
+.chartjs-tooltip-header,
+[class*="chartjs-tooltip"] {
+  position: absolute !important;
+  z-index: 9999 !important;
+  pointer-events: none !important;
+  background: rgba(15, 23, 42, 0.98) !important;
+  color: white !important;
+  border: 2px solid rgba(59, 130, 246, 0.4) !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  font-family: 'Inter', sans-serif !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+/* Ensure chart containers don't hide tooltips */
+.chart-container {
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* Force tooltip to be above everything */
+.chartjs-tooltip::before,
+.chartjs-tooltip-box::before,
+.chartjs-tooltip-body::before,
+.chartjs-tooltip-header::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid rgba(15, 23, 42, 0.98);
+}
+
+/* Nuclear option - target ANY potential tooltip */
+div[style*="position: absolute"],
+div[style*="z-index"],
+div[style*="background"],
+div[style*="color: white"],
+div[style*="border"] {
+  z-index: 9999 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
