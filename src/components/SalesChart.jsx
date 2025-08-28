@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState } from "react"
+import React, { useRef, useCallback, useState, forwardRef, useImperativeHandle } from "react"
 import { Line } from "react-chartjs-2"
 import { Download, FileText, FileSpreadsheet, Database } from "lucide-react"
 import {
@@ -26,10 +26,24 @@ ChartJS.register(
   zoomPlugin
 )
 
-export default function SalesChart({ chartData, chartOptions, title, icon, iconColor, showControls = true, showExport = true, onExportExcel, onExportPDF, onExportJSON }) {
+const SalesChart = forwardRef(({ chartData, chartOptions, title, icon, iconColor, showControls = true, showExport = true, onExportExcel, onExportPDF, onExportJSON }, ref) => {
   const chartRef = useRef(null)
   const [showExportOptions, setShowExportOptions] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
+
+  // Expose zoom methods to parent component
+  useImperativeHandle(ref, () => ({
+    zoom: (factor) => {
+      if (chartRef.current) {
+        chartRef.current.zoom(factor)
+      }
+    },
+    resetZoom: () => {
+      if (chartRef.current) {
+        chartRef.current.resetZoom()
+      }
+    }
+  }))
 
   // Zoom controls
   const handleZoomIn = useCallback(() => {
@@ -235,4 +249,6 @@ export default function SalesChart({ chartData, chartOptions, title, icon, iconC
       </div>
     </div>
   )
-}
+})
+
+export default SalesChart

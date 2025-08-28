@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import Dashboard from './components/Dashboard'
 import AnalyticsView from './components/AnalyticsView'
 import PerformanceView from './components/PerformanceView'
+import ExportView from './components/ExportView'
 
 // Navigation Component
 const Navigation = () => {
@@ -117,19 +118,6 @@ const App = () => {
 }
 
 // Placeholder Route Components (we'll build these next)
-
-const ExportView = () => (
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div className="text-center">
-      <h2 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">
-        📤 Export Tools
-      </h2>
-      <p className="text-neutral-600 dark:text-neutral-400">
-        Advanced data export capabilities coming soon...
-      </p>
-    </div>
-  </div>
-)
 
 const SettingsView = () => (
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
