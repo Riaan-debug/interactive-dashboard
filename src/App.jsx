@@ -4,65 +4,10 @@ import Dashboard from './components/Dashboard'
 import AnalyticsView from './components/AnalyticsView'
 import PerformanceView from './components/PerformanceView'
 import ExportView from './components/ExportView'
+import Navigation from './components/Navigation'
+import { ThemeProvider } from './contexts/ThemeContext'
 
-// Navigation Component
-const Navigation = () => {
-  const location = useLocation()
-  
-  const navItems = [
-    { path: '/', label: 'Dashboard', icon: '📊' },
-    { path: '/analytics', label: 'Analytics', icon: '📈' },
-    { path: '/performance', label: 'Performance', icon: '⚡' },
-    { path: '/export', label: 'Export', icon: '📤' },
-    { path: '/settings', label: 'Settings', icon: '⚙️' }
-  ]
 
-  return (
-    <nav className="bg-white dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <h1 className="text-xl font-bold text-accent-600 dark:text-accent-400">
-                Interactive Dashboard
-              </h1>
-            </div>
-          </div>
-          
-          {/* Navigation Links */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                    location.pathname === item.path
-                      ? 'bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300'
-                      : 'text-neutral-600 dark:text-neutral-300 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-neutral-100 dark:hover:bg-neutral-700'
-                  }`}
-                >
-                  <span className="mr-2">{item.icon}</span>
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-          
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button className="text-neutral-600 dark:text-neutral-300 hover:text-accent-600 dark:hover:text-accent-400">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </nav>
-  )
-}
 
 // Breadcrumb Component
 const Breadcrumb = () => {
@@ -99,21 +44,23 @@ const Breadcrumb = () => {
 // Main App Component
 const App = () => {
   return (
-    <Router>
-      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
-        <Navigation />
-        <Breadcrumb />
-        <main>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/analytics" element={<AnalyticsView />} />
-            <Route path="/performance" element={<PerformanceView />} />
-            <Route path="/export" element={<ExportView />} />
-            <Route path="/settings" element={<SettingsView />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+          <Navigation />
+          <Breadcrumb />
+          <main>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/analytics" element={<AnalyticsView />} />
+              <Route path="/performance" element={<PerformanceView />} />
+              <Route path="/export" element={<ExportView />} />
+              <Route path="/settings" element={<SettingsView />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </ThemeProvider>
   )
 }
 
