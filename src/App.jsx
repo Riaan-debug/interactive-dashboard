@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
 import Dashboard from './components/Dashboard'
 import AnalyticsView from './components/AnalyticsView'
+import PerformanceView from './components/PerformanceView'
 
 // Navigation Component
 const Navigation = () => {
@@ -116,18 +117,6 @@ const App = () => {
 }
 
 // Placeholder Route Components (we'll build these next)
-const PerformanceView = () => (
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div className="text-center">
-      <h2 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">
-        ⚡ Performance View
-      </h2>
-      <p className="text-neutral-600 dark:text-neutral-400">
-        System performance monitoring coming soon...
-      </p>
-    </div>
-  </div>
-)
 
 const ExportView = () => (
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
