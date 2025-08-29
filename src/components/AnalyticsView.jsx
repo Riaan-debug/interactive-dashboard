@@ -62,7 +62,7 @@ const AnalyticsView = () => {
       change: '+15.3%',
       changeType: 'positive',
       icon: TrendingUp,
-      color: 'text-accent-600'
+              color: 'text-primary'
     },
     {
       title: 'Average Order Value',
@@ -114,7 +114,7 @@ const AnalyticsView = () => {
             <select
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value)}
-              className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-accent-500 focus:border-transparent"
+              className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary focus:border-transparent"
             >
               <option value="week">Week</option>
               <option value="month">Month</option>
@@ -129,7 +129,7 @@ const AnalyticsView = () => {
             <select
               value={selectedMetric}
               onChange={(e) => setSelectedMetric(e.target.value)}
-              className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-accent-500 focus:border-transparent"
+              className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary focus:border-transparent"
             >
               <option value="revenue">Revenue</option>
               <option value="volume">Volume</option>
@@ -145,7 +145,7 @@ const AnalyticsView = () => {
             <select
               value={chartType}
               onChange={(e) => setChartType(e.target.value)}
-              className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-accent-500 focus:border-transparent"
+              className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary focus:border-transparent"
             >
               <option value="line">Line Chart</option>
               <option value="bar">Bar Chart</option>
@@ -245,19 +245,19 @@ const AnalyticsView = () => {
       </div>
 
       {/* Insights Panel */}
-      <div className="mt-8 bg-gradient-to-r from-accent-50 to-accent-100 dark:from-accent-900/30 dark:to-accent-800/30 rounded-xl p-6 border border-accent-200/60 dark:border-accent-700/60">
-        <h3 className="text-lg font-semibold text-accent-900 dark:text-accent-100 mb-4">
+      <div className="mt-8 bg-gradient-to-r from-primary-light to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 rounded-xl p-6 border border-primary-200/60 dark:border-primary-700/60">
+        <h3 className="text-lg font-semibold text-primary-900 dark:text-primary-100 mb-4">
           💡 Key Insights
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-3">
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-accent-500 rounded-full mt-2"></div>
+              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
               <div>
-                <p className="text-sm font-medium text-accent-800 dark:text-accent-200">
+                <p className="text-sm font-medium text-primary-800 dark:text-primary-200">
                   Revenue Trend
                 </p>
-                <p className="text-sm text-accent-700 dark:text-accent-300">
+                <p className="text-sm text-primary-700 dark:text-primary-300">
                   {selectedPeriod === 'week' ? 'Weekly' : selectedPeriod === 'month' ? 'Monthly' : 'Yearly'} revenue shows a {selectedMetric === 'revenue' ? 'strong upward' : 'consistent'} trend
                 </p>
               </div>
@@ -265,10 +265,10 @@ const AnalyticsView = () => {
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 bg-success-500 rounded-full mt-2"></div>
               <div>
-                <p className="text-sm font-medium text-accent-800 dark:text-accent-200">
+                <p className="text-sm font-medium text-primary-800 dark:text-primary-200">
                   Performance
                 </p>
-                <p className="text-sm text-accent-700 dark:text-accent-300">
+                <p className="text-sm text-primary-700 dark:text-primary-300">
                   Your {selectedMetric} performance is above industry benchmarks
                 </p>
               </div>
@@ -278,10 +278,10 @@ const AnalyticsView = () => {
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 bg-warning-500 rounded-full mt-2"></div>
               <div>
-                <p className="text-sm font-medium text-accent-800 dark:text-accent-200">
+                <p className="text-sm font-medium text-primary-800 dark:text-primary-200">
                   Opportunities
                 </p>
-                <p className="text-sm text-accent-700 dark:text-accent-300">
+                <p className="text-sm text-primary-700 dark:text-primary-300">
                   Consider expanding into new markets based on current growth patterns
                 </p>
               </div>
@@ -289,10 +289,10 @@ const AnalyticsView = () => {
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 bg-danger-500 rounded-full mt-2"></div>
               <div>
-                <p className="text-sm font-medium text-accent-800 dark:text-accent-200">
+                <p className="text-sm font-medium text-primary-800 dark:text-primary-200">
                   Recommendations
                 </p>
-                <p className="text-sm text-accent-700 dark:text-accent-300">
+                <p className="text-sm text-primary-700 dark:text-primary-300">
                   Focus on customer retention strategies to maintain growth momentum
                 </p>
               </div>

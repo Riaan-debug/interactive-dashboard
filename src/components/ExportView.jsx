@@ -828,21 +828,21 @@ const ExportView = () => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleZoomIn}
-                    className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200"
+                    className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-primary hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-all duration-200"
                     title="Zoom In"
                   >
                     <ZoomIn className="w-4 h-4" />
                   </button>
                   <button
                     onClick={handleZoomOut}
-                    className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200"
+                    className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-primary hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-all duration-200"
                     title="Zoom Out"
                   >
                     <ZoomOut className="w-4 h-4" />
                   </button>
                   <button
                     onClick={handleResetZoom}
-                    className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200"
+                    className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-primary hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-all duration-200"
                     title="Reset Zoom"
                   >
                     <RotateCcw className="w-4 h-4" />
@@ -864,7 +864,7 @@ const ExportView = () => {
              
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="space-y-2">
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                <div className="text-2xl font-bold text-primary dark:text-primary">
                   {dataTypes[selectedData].recordCount.toLocaleString()}
                 </div>
                 <div className="text-sm text-neutral-600 dark:text-neutral-400">Total Records</div>
@@ -914,8 +914,8 @@ const ExportView = () => {
                 {filteredExportHistory.map((export_) => (
                   <div key={export_.id} className="flex items-center justify-between p-4 rounded-lg border border-neutral-200 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700/50">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/20">
-                        <Download className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                      <div className="p-2 rounded-lg bg-primary-100 dark:bg-primary-900/20">
+                        <Download className="w-5 h-5 text-primary dark:text-primary" />
                       </div>
                       <div>
                         <div className="font-medium text-neutral-900 dark:text-neutral-100">

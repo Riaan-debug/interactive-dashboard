@@ -303,7 +303,7 @@ const PerformanceView = () => {
         type: 'info',
         message: 'CPU usage is elevated. Monitor for performance bottlenecks.',
         icon: Cpu,
-        color: 'text-blue-600'
+        color: 'text-primary'
       })
     }
     
@@ -411,8 +411,8 @@ const PerformanceView = () => {
         {/* Render Time */}
         <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-enterprise border border-neutral-200/60 dark:border-neutral-700/60 p-6">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/20">
-              <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <div className="p-3 rounded-lg bg-primary-100 dark:bg-primary-900/20">
+              <Clock className="w-6 h-6 text-primary dark:text-primary" />
             </div>
             <span className={`text-sm font-medium px-2 py-1 rounded-full ${
               performanceMetrics.renderTime <= 16 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
@@ -428,7 +428,7 @@ const PerformanceView = () => {
           <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">Render Time</p>
           <div className="w-full bg-neutral-200 dark:bg-neutral-600 rounded-full h-2">
             <div 
-              className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+              className="bg-primary h-2 rounded-full transition-all duration-300"
               style={{ width: `${Math.min((performanceMetrics.renderTime / 16) * 100, 100)}%` }}
             ></div>
           </div>
@@ -489,39 +489,39 @@ const PerformanceView = () => {
       </div>
 
       {/* Performance Summary */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200/60 dark:border-blue-700/60 mb-8">
+      <div className="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-xl p-6 border border-primary-200/60 dark:border-primary-700/60 mb-8">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100">
+          <h3 className="text-lg font-semibold text-primary-900 dark:text-primary-100">
             📊 Performance Summary
           </h3>
-          <div className="text-sm text-blue-700 dark:text-blue-300">
+          <div className="text-sm text-primary-700 dark:text-primary-300">
             {filteredPerformanceHistory.length} data points • {selectedTimeframe} timeframe
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+            <div className="text-2xl font-bold text-primary dark:text-primary">
               {filteredPerformanceHistory.length > 0 ? Math.round(filteredPerformanceHistory.reduce((sum, entry) => sum + entry.fps, 0) / filteredPerformanceHistory.length) : 0}
             </div>
-            <div className="text-sm text-blue-700 dark:text-blue-300">Avg FPS</div>
+            <div className="text-sm text-primary-700 dark:text-primary-300">Avg FPS</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+            <div className="text-2xl font-bold text-primary dark:text-primary">
               {filteredPerformanceHistory.length > 0 ? Math.round(filteredPerformanceHistory.reduce((sum, entry) => sum + entry.renderTime, 0) / filteredPerformanceHistory.length) : 0}ms
             </div>
-            <div className="text-sm text-blue-700 dark:text-blue-300">Avg Render Time</div>
+            <div className="text-sm text-primary-700 dark:text-primary-300">Avg Render Time</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+            <div className="text-2xl font-bold text-primary dark:text-primary">
               {filteredPerformanceHistory.length > 0 ? Math.round(filteredPerformanceHistory.reduce((sum, entry) => sum + entry.cpu, 0) / filteredPerformanceHistory.length) : 0}%
             </div>
-            <div className="text-sm text-blue-700 dark:text-blue-300">Avg CPU Usage</div>
+            <div className="text-sm text-primary-700 dark:text-primary-300">Avg CPU Usage</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+            <div className="text-2xl font-bold text-primary dark:text-primary">
               {filteredPerformanceHistory.length > 0 ? Math.round(filteredPerformanceHistory.reduce((sum, entry) => sum + entry.memory.used, 0) / filteredPerformanceHistory.length) : 0}MB
             </div>
-            <div className="text-sm text-blue-700 dark:text-blue-300">Avg Memory</div>
+            <div className="text-sm text-primary-700 dark:text-primary-300">Avg Memory</div>
           </div>
         </div>
       </div>
@@ -568,8 +568,8 @@ const PerformanceView = () => {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="text-center">
-            <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/20 inline-block mb-3">
-              <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <div className="p-3 rounded-lg bg-primary-100 dark:bg-primary-900/20 inline-block mb-3">
+              <Activity className="w-6 h-6 text-primary dark:text-primary" />
             </div>
             <h4 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
               {performanceMetrics.network.requests}
@@ -600,8 +600,8 @@ const PerformanceView = () => {
       </div>
 
       {/* Performance Insights */}
-      <div className="bg-gradient-to-r from-accent-50 to-accent-100 dark:from-accent-900/30 dark:to-accent-800/30 rounded-xl p-6 border border-accent-200/60 dark:border-accent-700/60">
-        <h3 className="text-lg font-semibold text-accent-900 dark:text-accent-100 mb-4">
+      <div className="bg-gradient-to-r from-primary-light to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 rounded-xl p-6 border border-primary-200/60 dark:border-primary-700/60">
+        <h3 className="text-lg font-semibold text-primary-900 dark:text-primary-100 mb-4">
           💡 Performance Insights
         </h3>
         <div className="space-y-3">
@@ -611,8 +611,8 @@ const PerformanceView = () => {
               <div key={index} className="flex items-start gap-3">
                 <div className={`w-2 h-2 rounded-full mt-2 ${insight.color.replace('text-', 'bg-')}`}></div>
                 <div className="flex items-center gap-2">
-                  <Icon className={`w-4 h-4 ${insight.color}`} />
-                  <p className="text-sm text-accent-800 dark:text-accent-200">
+                  <Icon className={`w-4 h-6 ${insight.color}`} />
+                  <p className="text-sm text-primary-800 dark:text-primary-200">
                     {insight.message}
                   </p>
                 </div>

@@ -13,6 +13,21 @@
   * {
     @apply border-neutral-200 dark:border-neutral-700;
   }
+
+  /* CSS Custom Properties for dynamic primary color */
+  :root {
+    --primary-color: #3B82F6;
+    --primary-color-50: #EFF6FF;
+    --primary-color-100: #DBEAFE;
+    --primary-color-200: #BFDBFE;
+    --primary-color-300: #93C5FD;
+    --primary-color-400: #60A5FA;
+    --primary-color-500: #3B82F6;
+    --primary-color-600: #2563EB;
+    --primary-color-700: #1D4ED8;
+    --primary-color-800: #1E40AF;
+    --primary-color-900: #1E3A8A;
+  }
 }
 
 @layer components {
@@ -25,7 +40,16 @@
   }
   
   .btn-primary {
-    @apply bg-accent-600 hover:bg-accent-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-accent-500 focus:ring-offset-2;
+    background-color: var(--primary-color-600);
+    @apply text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .btn-primary:focus {
+    --tw-ring-color: var(--primary-color-500);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-color-700);
   }
   
   .btn-secondary {
@@ -53,7 +77,8 @@
   }
   
   .period-button-active {
-    @apply bg-accent-600 text-white shadow-sm;
+    background-color: var(--primary-color-600);
+    @apply text-white shadow-sm;
   }
   
   .period-button-inactive {
@@ -100,8 +125,67 @@
     @apply flex items-center gap-2;
   }
 
+  .slider {
+    @apply appearance-none bg-transparent cursor-pointer;
+  }
+
+  .slider::-webkit-slider-track {
+    @apply bg-neutral-200 dark:bg-neutral-700 rounded-lg h-2;
+  }
+
+  .slider::-webkit-slider-thumb {
+    @apply appearance-none h-5 w-5 rounded-full cursor-pointer shadow-md transition-colors;
+    background-color: var(--primary-color-600);
+  }
+  
+  .slider::-webkit-slider-thumb:hover {
+    background-color: var(--primary-color-700);
+  }
+
+  .slider::-moz-range-track {
+    @apply bg-neutral-200 dark:bg-neutral-700 rounded-lg h-2 border-0;
+  }
+
+  .slider::-moz-range-thumb {
+    @apply h-5 w-5 rounded-full cursor-pointer border-0 shadow-md transition-colors;
+    background-color: var(--primary-color-600);
+  }
+  
+  .slider::-moz-range-thumb:hover {
+    background-color: var(--primary-color-700);
+  }
+
+  /* Custom color input styling */
+  input[type="color"] {
+    @apply cursor-pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    @apply p-0;
+  }
+
+  input[type="color"]::-webkit-color-swatch {
+    @apply border-0 rounded-lg;
+  }
+
+  input[type="color"]::-moz-color-swatch {
+    @apply border-0 rounded-lg;
+  }
+
   .chart-control-button {
-    @apply p-2 text-neutral-600 dark:text-neutral-400 hover:text-accent-600 hover:bg-accent-50 dark:hover:bg-accent-900/20 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800;
+    @apply p-2 text-neutral-600 dark:text-neutral-400 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-neutral-800;
+  }
+  
+  .chart-control-button:hover {
+    color: var(--primary-color-600);
+    background-color: var(--primary-color-50);
+  }
+  
+  .chart-control-button:focus {
+    --tw-ring-color: var(--primary-color-500);
   }
 
   .export-dropdown {
@@ -109,7 +193,12 @@
   }
 
   .export-option {
-    @apply w-full flex items-center gap-3 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-accent-50 dark:hover:bg-accent-900/20 hover:text-accent-700 rounded-md transition-colors duration-200;
+    @apply w-full flex items-center gap-3 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-300 rounded-md transition-colors duration-200;
+  }
+  
+  .export-option:hover {
+    background-color: var(--primary-color-50);
+    color: var(--primary-color-700);
   }
   
   .stat-value {
@@ -149,7 +238,8 @@
   }
   
   .metric-icon-users {
-    @apply bg-gradient-to-br from-accent-100 to-accent-200 text-accent-700;
+    background: linear-gradient(to bottom right, var(--primary-color-100), var(--primary-color-200));
+    color: var(--primary-color-700);
   }
   
   .metric-icon-conversion {
@@ -165,6 +255,17 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
   
   .animate-fade-in {
     animation: fadeIn 0.6s ease-out;
@@ -178,6 +279,10 @@
     animation: scaleIn 0.3s ease-out;
   }
 
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+
   .hover\:scale-102:hover {
     transform: scale(1.02);
   }
@@ -188,6 +293,104 @@
 
   .hover\:scale-110:hover {
     transform: scale(1.1);
+  }
+
+  /* Dynamic primary color utilities */
+  .text-primary {
+    color: var(--primary-color-600);
+  }
+  
+  .bg-primary {
+    background-color: var(--primary-color-600);
+  }
+  
+  .bg-primary-light {
+    background-color: var(--primary-color-50);
+  }
+  
+  .bg-primary-dark {
+    background-color: var(--primary-color-800);
+  }
+  
+  .border-primary {
+    border-color: var(--primary-color-300);
+  }
+  
+  .ring-primary {
+    --tw-ring-color: var(--primary-color-500);
+  }
+  
+  /* Additional primary color variations */
+  .bg-primary-100 {
+    background-color: var(--primary-color-100);
+  }
+  
+  .bg-primary-200 {
+    background-color: var(--primary-color-200);
+  }
+  
+  .bg-primary-300 {
+    background-color: var(--primary-color-300);
+  }
+  
+  .bg-primary-400 {
+    background-color: var(--primary-color-400);
+  }
+  
+  .bg-primary-500 {
+    background-color: var(--primary-color-500);
+  }
+  
+  .bg-primary-700 {
+    background-color: var(--primary-color-700);
+  }
+  
+  .bg-primary-800 {
+    background-color: var(--primary-color-800);
+  }
+  
+  .bg-primary-900 {
+    background-color: var(--primary-color-900);
+  }
+  
+  .text-primary-100 {
+    color: var(--primary-color-100);
+  }
+  
+  .text-primary-200 {
+    color: var(--primary-color-200);
+  }
+  
+  .text-primary-300 {
+    color: var(--primary-color-300);
+  }
+  
+  .text-primary-400 {
+    color: var(--primary-color-400);
+  }
+  
+  .text-primary-500 {
+    color: var(--primary-color-500);
+  }
+  
+  .text-primary-700 {
+    color: var(--primary-color-700);
+  }
+  
+  .text-primary-800 {
+    color: var(--primary-color-800);
+  }
+  
+  .text-primary-900 {
+    color: var(--primary-color-900);
+  }
+  
+  .border-primary-200 {
+    border-color: var(--primary-color-200);
+  }
+  
+  .border-primary-700 {
+    border-color: var(--primary-color-700);
   }
 }
 

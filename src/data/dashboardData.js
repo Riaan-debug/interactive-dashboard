@@ -49,7 +49,7 @@ export const stats = [
 ]
 
 export const deviceData = [
-  { name: 'Desktop', value: 300, icon: Monitor, color: 'text-accent-600' },
+      { name: 'Desktop', value: 300, icon: Monitor, color: 'text-primary' },
   { name: 'Mobile', value: 150, icon: Smartphone, color: 'text-success-600' },
   { name: 'Tablet', value: 100, icon: Tablet, color: 'text-warning-600' },
 ]

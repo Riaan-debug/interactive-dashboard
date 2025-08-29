@@ -41,9 +41,9 @@ const DrillDownModal = ({
             </div>
           </div>
           
-          <div className="bg-gradient-to-r from-accent-50 to-accent-100 dark:from-accent-900/30 dark:to-accent-800/30 rounded-lg p-6">
-            <p className="text-sm font-medium text-accent-600 dark:text-accent-400 mb-2">Value</p>
-            <p className="text-3xl font-bold text-accent-900 dark:text-accent-100">
+                  <div className="bg-gradient-to-r from-primary-light to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 rounded-lg p-6">
+          <p className="text-sm font-medium text-primary mb-2">Value</p>
+          <p className="text-3xl font-bold text-primary-900 dark:text-primary-100">
               {selectedDataPoint.metric.includes('Revenue') || selectedDataPoint.metric.includes('Profit') 
                 ? `R${selectedDataPoint.value.toLocaleString()}` 
                 : selectedDataPoint.value.toLocaleString()}
@@ -59,7 +59,7 @@ const DrillDownModal = ({
             </button>
             <button
               onClick={onExportAnalysis}
-              className="flex-1 bg-accent-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-accent-700 transition-colors duration-200"
+              className="flex-1 bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary-dark transition-colors duration-200"
             >
               Export Analysis
             </button>

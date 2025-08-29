@@ -7,9 +7,11 @@ import StatsGrid from './StatsGrid'
 import PerformanceMonitor from './PerformanceMonitor'
 import DrillDownModal from './DrillDownModal'
 import ActivityFeed from './ActivityFeed'
+import Toast from './Toast'
 
 // Import utilities and data
 import { useCountUp } from '../hooks/useCountUp'
+import { useSettings } from '../contexts/SettingsContext'
 import { stats, activities, salesData, barData, doughnutData } from '../data/dashboardData'
 import { createChartOptions, createMultiMetricOptions } from '../utils/chartOptions'
 import { createChartData, createMultiMetricData } from '../utils/chartData'
@@ -19,8 +21,10 @@ import { exportToExcel as exportExcelUtil, exportToPDF as exportPdfUtil, exportT
 
 
 const Dashboard = () => {
+  const { settings } = useSettings()
+  
   // State management
-  const [selectedPeriod, setSelectedPeriod] = useState('week')
+  const [selectedPeriod, setSelectedPeriod] = useState(settings.general.defaultPeriod)
   const [selectedMetric, setSelectedMetric] = useState('revenue')
 
   const [showDrillDown, setShowDrillDown] = useState(false)
@@ -34,6 +38,21 @@ const Dashboard = () => {
     fps: 60,
     renderTime: 16
   })
+
+  // Update selectedPeriod when settings change
+  useEffect(() => {
+    setSelectedPeriod(settings.general.defaultPeriod)
+  }, [settings.general.defaultPeriod])
+
+  // Show toast when settings change
+  const [showSettingsToast, setShowSettingsToast] = useState(false)
+  
+  useEffect(() => {
+    // Show toast when settings change
+    setShowSettingsToast(true)
+    const timer = setTimeout(() => setShowSettingsToast(false), 3000)
+    return () => clearTimeout(timer)
+  }, [settings])
 
 
 
@@ -142,9 +161,35 @@ const Dashboard = () => {
   }, [selectedPeriod, selectedMetric, salesData])
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-
+    <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${settings.general.compactMode ? 'py-6' : 'py-8'}`}>
+      {/* Header */}
+      <div className={settings.general.compactMode ? 'mb-6' : 'mb-8'}>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+              Dashboard
+            </h1>
+            <p className="text-neutral-600 dark:text-neutral-400">
+              Real-time insights and analytics overview
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                Refresh Rate: {settings.general.dashboardRefreshRate}s
+              </p>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                Period: {selectedPeriod}
+              </p>
+              {settings.general.compactMode && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-light text-primary">
+                  Compact Mode
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Stats Grid */}
       <StatsGrid stats={stats} useCountUp={useCountUp} />
@@ -179,7 +224,7 @@ const Dashboard = () => {
       )}
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+      <div className={`grid grid-cols-1 lg:grid-cols-3 ${settings.general.compactMode ? 'gap-4 mt-6' : 'gap-6 mt-8'}`}>
         {/* Bar Chart */}
         <BarChart
           chartData={barData}
@@ -230,6 +275,15 @@ const Dashboard = () => {
             handleExportExcel()
           }
         }}
+      />
+
+      {/* Settings Toast */}
+      <Toast
+        message="Settings applied successfully!"
+        type="success"
+        isVisible={showSettingsToast}
+        onClose={() => setShowSettingsToast(false)}
+        duration={3000}
       />
     </div>
   )

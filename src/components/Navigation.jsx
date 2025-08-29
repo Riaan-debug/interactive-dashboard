@@ -30,9 +30,9 @@ const Navigation = () => {
           {/* Logo */}
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <h1 className="text-xl font-bold text-accent-600 dark:text-accent-400">
-                Interactive Dashboard
-              </h1>
+                      <h1 className="text-xl font-bold text-primary">
+          Interactive Dashboard
+        </h1>
             </div>
           </div>
           
@@ -45,8 +45,8 @@ const Navigation = () => {
                   to={item.path}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                     location.pathname === item.path
-                      ? 'bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300'
-                      : 'text-neutral-600 dark:text-neutral-300 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+                      ? 'bg-primary-light text-primary'
+                      : 'text-neutral-600 dark:text-neutral-300 hover:text-primary hover:bg-neutral-100 dark:hover:bg-neutral-700'
                   }`}
                 >
                   <span className="mr-2">{item.icon}</span>
@@ -60,7 +60,7 @@ const Navigation = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={toggleTheme}
-              className="p-2 text-neutral-600 dark:text-neutral-300 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all duration-200"
+              className="p-2 text-neutral-600 dark:text-neutral-300 hover:text-primary hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-all duration-200"
               title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
               {isDarkMode ? (
@@ -78,7 +78,7 @@ const Navigation = () => {
             <div className="md:hidden">
               <button 
                 onClick={toggleMobileMenu}
-                className="text-neutral-600 dark:text-neutral-300 hover:text-accent-600 dark:hover:text-accent-400 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-all duration-200"
+                className="text-neutral-600 dark:text-neutral-300 hover:text-primary p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-all duration-200"
                 aria-label="Toggle mobile menu"
               >
                 {isMobileMenuOpen ? (
@@ -107,8 +107,8 @@ const Navigation = () => {
                 onClick={closeMobileMenu}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-200 ${
                   location.pathname === item.path
-                    ? 'bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300'
-                    : 'text-neutral-600 dark:text-neutral-300 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+                    ? 'bg-primary-light text-primary'
+                    : 'text-neutral-600 dark:text-neutral-300 hover:text-primary hover:bg-neutral-100 dark:hover:bg-neutral-700'
                 }`}
               >
                 <span className="mr-2">{item.icon}</span>

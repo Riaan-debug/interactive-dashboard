@@ -3,7 +3,7 @@ import React from 'react'
 const PerformanceMonitor = ({ performanceMetrics }) => {
   return (
     <div className="mt-8 animate-slide-up" style={{ animationDelay: '400ms' }}>
-      <div className="bg-gradient-to-r from-neutral-50 to-accent-50 dark:from-neutral-800 dark:to-neutral-700 rounded-xl p-6 border border-neutral-200/60 dark:border-neutral-700/60">
+      <div className="bg-gradient-to-r from-neutral-50 to-primary-50 dark:from-neutral-800 dark:to-neutral-700 rounded-xl p-6 border border-neutral-200/60 dark:border-neutral-700/60">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
             System Performance
@@ -33,7 +33,7 @@ const PerformanceMonitor = ({ performanceMetrics }) => {
           <div className="bg-white dark:bg-neutral-700 rounded-lg p-4 border border-neutral-200/60 dark:border-neutral-600/60">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Render Time</span>
-              <span className="text-lg font-bold text-accent-600">{performanceMetrics.renderTime}ms</span>
+              <span className="text-lg font-bold text-primary">{performanceMetrics.renderTime}ms</span>
             </div>
             <div className="mt-2 w-full bg-neutral-200 dark:bg-neutral-600 rounded-full h-2">
               <div 
