@@ -11,16 +11,28 @@ import {
   Save,
   RefreshCw,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Download,
+  Upload,
+  FileText,
+  FileSpreadsheet,
+  List,
+  X
 } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 import { useSettings } from '../contexts/SettingsContext'
+import { buildApiUrl } from '../config/environment'
 
 const SettingsView = () => {
   const { isDarkMode, toggleTheme } = useTheme()
   const { settings, updateSettings, resetSettings, defaultSettings } = useSettings()
   const [activeTab, setActiveTab] = useState('general')
   const [saved, setSaved] = useState(false)
+  const [isBackingUp, setIsBackingUp] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
+  const [backupStatus, setBackupStatus] = useState(null)
+  const [showBackupHistory, setShowBackupHistory] = useState(false)
+  const [backups, setBackups] = useState([])
   const [isSaving, setIsSaving] = useState(false)
 
   // Color presets for reference
@@ -75,6 +87,197 @@ const SettingsView = () => {
   const handleReset = () => {
     resetSettings()
     setSaved(false)
+  }
+
+  // Backup and Export Functions
+  const handleCreateBackup = async () => {
+    setIsBackingUp(true)
+    setBackupStatus(null)
+    
+    try {
+      console.log('Attempting to connect to backend...')
+      
+      const response = await fetch(buildApiUrl('/backup/create'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'omit',
+        body: JSON.stringify({
+          backupType: 'manual',
+          includeData: true
+        })
+      })
+      
+      console.log('Backend response:', response)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      console.log('Backend data:', data)
+      
+      if (data.success) {
+        setBackupStatus({
+          type: 'success',
+          message: `Backup created successfully: ${data.filename}`
+        })
+        // Don't automatically show backup history - let user choose when to view it
+      } else {
+        setBackupStatus({
+          type: 'error',
+          message: data.error || 'Failed to create backup'
+        })
+      }
+    } catch (error) {
+      console.error('Backup error:', error)
+      setBackupStatus({
+        type: 'error',
+        message: `Connection error: ${error.message}`
+      })
+    } finally {
+      setIsBackingUp(false)
+    }
+  }
+
+  const handleListBackups = async () => {
+    try {
+      console.log('Fetching backup list...')
+      
+      const response = await fetch(buildApiUrl('/backup/list'), {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'omit',
+      })
+      
+      console.log('Backup list response:', response)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      console.log('Backup list data:', data)
+      
+      if (data.success) {
+        setBackups(data.backups)
+        setShowBackupHistory(true)
+      } else {
+        setBackupStatus({
+          type: 'error',
+          message: data.error || 'Failed to fetch backup history'
+        })
+      }
+    } catch (error) {
+      console.error('Backup list error:', error)
+      setBackupStatus({
+        type: 'error',
+        message: `Failed to fetch backup history: ${error.message}`
+      })
+    }
+  }
+
+  const handleTestConnection = async () => {
+    try {
+      console.log('Testing backend connection...')
+      
+      const response = await fetch(buildApiUrl('/health'), {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'omit',
+      })
+      
+      console.log('Health check response:', response)
+      
+      if (response.ok) {
+        const data = await response.json()
+        console.log('Health check data:', data)
+        setBackupStatus({
+          type: 'success',
+          message: `✅ Backend connected! Status: ${data.status}`
+        })
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+    } catch (error) {
+      console.error('Connection test error:', error)
+      setBackupStatus({
+        type: 'error',
+        message: `❌ Connection failed: ${error.message}`
+      })
+    }
+  }
+
+  const handleExportData = async (format) => {
+    setIsExporting(true)
+    setBackupStatus(null)
+    
+    try {
+      console.log(`Exporting data to ${format}...`)
+      
+      const response = await fetch(buildApiUrl('/export/data'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'omit',
+        body: JSON.stringify({
+          format: format,
+          dataType: 'dashboard',
+          selectedPeriod: 'week'
+        })
+      })
+      
+      console.log('Export response:', response)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      // Get the filename from the Content-Disposition header
+      const contentDisposition = response.headers.get('Content-Disposition')
+      const filename = contentDisposition ? 
+        contentDisposition.split('filename=')[1]?.replace(/"/g, '') : 
+        `dashboard-export-${format}-${new Date().toISOString().replace(/[:.]/g, '-')}.${format === 'excel' ? 'xlsx' : format}`
+      
+      // Get the file data as blob
+      const blob = await response.blob()
+      
+      // Create download link
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+      
+      // Show success message
+      setBackupStatus({
+        type: 'success',
+        message: `${format.toUpperCase()} export completed and downloaded: ${filename}`
+      })
+      
+    } catch (error) {
+      console.error('Export error:', error)
+      setBackupStatus({
+        type: 'error',
+        message: `Export error: ${error.message}`
+      })
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   const tabs = [
@@ -619,6 +822,163 @@ const SettingsView = () => {
               <option value="pdf">PDF (.pdf)</option>
               <option value="json">JSON (.json)</option>
             </select>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="pt-6 border-t border-neutral-200 dark:border-neutral-700">
+            <h4 className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-4">
+              Quick Actions
+            </h4>
+            
+            {/* Test Connection Button */}
+            <div className="mb-4">
+              <button
+                onClick={handleTestConnection}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors"
+              >
+                <Database className="h-4 w-4" />
+                Test Backend Connection
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Backup Section */}
+              <div className="space-y-3">
+                <h5 className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                  Backup & Restore
+                </h5>
+                
+                <button
+                  onClick={handleCreateBackup}
+                  disabled={isBackingUp}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {isBackingUp ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <Download className="h-4 w-4" />
+                  )}
+                  {isBackingUp ? 'Creating Backup...' : 'Create Backup Now'}
+                </button>
+
+                <button
+                  onClick={handleListBackups}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+                >
+                  <List className="h-4 w-4" />
+                  View Backup History
+                </button>
+              </div>
+
+              {/* Export Section */}
+              <div className="space-y-3">
+                <h5 className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                  Export Data
+                </h5>
+                
+                <button
+                  onClick={() => handleExportData('excel')}
+                  disabled={isExporting}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                  {isExporting ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <FileSpreadsheet className="h-4 w-4" />
+                  )}
+                  Export to Excel
+                </button>
+
+                <button
+                  onClick={() => handleExportData('csv')}
+                  disabled={isExporting}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                  {isExporting ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <FileText className="h-4 w-4" />
+                  )}
+                  Export to CSV
+                </button>
+              </div>
+            </div>
+
+            {/* Status Messages */}
+            {backupStatus && (
+              <div className={`mt-4 p-3 rounded-lg ${
+                backupStatus.type === 'success' 
+                  ? 'bg-green-200 dark:bg-success-900/20 border-2 border-green-500 dark:border-success-800' 
+                  : 'bg-red-200 dark:bg-error-900/20 border-2 border-red-500 dark:border-error-800'
+              }`}>
+                <div className="flex items-center gap-2">
+                  {backupStatus.type === 'success' ? (
+                    <CheckCircle className="h-5 w-5 text-green-700 dark:text-success-400" />
+                  ) : (
+                    <AlertCircle className="h-5 w-5 text-red-700 dark:text-error-400" />
+                  )}
+                  <span className={`text-sm font-semibold ${
+                    backupStatus.type === 'success' 
+                      ? 'text-green-900 dark:text-success-200' 
+                      : 'text-red-900 dark:text-error-200'
+                  }`}>
+                    {backupStatus.message}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Backup History Modal */}
+            {showBackupHistory && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="bg-white dark:bg-neutral-800 rounded-lg p-6 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                      Backup History
+                    </h3>
+                    <button
+                      onClick={() => setShowBackupHistory(false)}
+                      className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  </div>
+                  
+                  {backups.length > 0 ? (
+                    <div className="space-y-3">
+                      {backups.map((backup) => (
+                        <div key={backup.id} className="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                          <div>
+                            <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                              {backup.filename}
+                            </p>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                              {new Date(backup.created_at).toLocaleString()}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className={`px-2 py-1 text-xs rounded-full ${
+                              backup.status === 'completed' 
+                                ? 'bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-400' 
+                                : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-success-400'
+                            }`}>
+                              {backup.status}
+                            </span>
+                            <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                              {backup.file_size} bytes
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-neutral-600 dark:text-neutral-400 text-center py-8">
+                      No backups found. Create your first backup to get started!
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
