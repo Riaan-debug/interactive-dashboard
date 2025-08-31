@@ -20,7 +20,7 @@ const PerformanceMonitor = ({ performanceMetrics }) => {
           <div className="bg-white dark:bg-neutral-700 rounded-lg p-4 border border-neutral-200/60 dark:border-neutral-600/60">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">FPS</span>
-              <span className="text-lg font-bold text-success-600">{performanceMetrics.fps}</span>
+              <span className="text-lg font-bold text-success-600">{performanceMetrics.fps.toFixed(2)}</span>
             </div>
             <div className="mt-2 w-full bg-neutral-200 dark:bg-neutral-600 rounded-full h-2">
               <div 
@@ -33,7 +33,7 @@ const PerformanceMonitor = ({ performanceMetrics }) => {
           <div className="bg-white dark:bg-neutral-700 rounded-lg p-4 border border-neutral-200/60 dark:border-neutral-600/60">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">Render Time</span>
-              <span className="text-lg font-bold text-primary">{performanceMetrics.renderTime}ms</span>
+              <span className="text-lg font-bold text-primary">{performanceMetrics.renderTime.toFixed(2)}ms</span>
             </div>
             <div className="mt-2 w-full bg-neutral-200 dark:bg-neutral-600 rounded-full h-2">
               <div 

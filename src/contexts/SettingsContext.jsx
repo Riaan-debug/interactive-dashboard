@@ -108,6 +108,47 @@ export const SettingsProvider = ({ children }) => {
     }
   }, [settings.appearance.primaryColor])
 
+  // Update font size when it changes or on initial load
+  useEffect(() => {
+    const updateFontSize = (fontSize) => {
+      const root = document.documentElement
+      
+      // Define font size scales
+      const fontSizes = {
+        small: {
+          '--base-font-size': '14px',
+          '--heading-font-size': '18px',
+          '--subheading-font-size': '16px',
+          '--body-font-size': '14px',
+          '--small-font-size': '12px'
+        },
+        medium: {
+          '--base-font-size': '16px',
+          '--heading-font-size': '20px',
+          '--subheading-font-size': '18px',
+          '--body-font-size': '16px',
+          '--small-font-size': '14px'
+        },
+        large: {
+          '--base-font-size': '18px',
+          '--heading-font-size': '24px',
+          '--subheading-font-size': '20px',
+          '--body-font-size': '18px',
+          '--small-font-size': '16px'
+        }
+      }
+      
+      // Apply the selected font size
+      const selectedSize = fontSizes[fontSize] || fontSizes.medium
+      Object.entries(selectedSize).forEach(([property, value]) => {
+        root.style.setProperty(property, value)
+      })
+    }
+
+    // Apply font size on initial load and when it changes
+    updateFontSize(settings.appearance.fontSize)
+  }, [settings.appearance.fontSize])
+
   const updateSettings = (newSettings) => {
     setSettings(newSettings)
   }

@@ -23,6 +23,30 @@ Chart.defaults.interaction.intersect = false
 Chart.defaults.hover.mode = 'index'
 Chart.defaults.hover.intersect = false
 
+// Configure global grid defaults for consistent spacing
+Chart.defaults.scales.linear.grid = {
+  ...Chart.defaults.scales.linear.grid,
+  drawTicks: true,
+  drawOnChartArea: true,
+  color: 'rgba(0, 0, 0, 0.08)',
+  lineWidth: 1
+}
+
+
+
+Chart.defaults.scales.category.grid = {
+  ...Chart.defaults.scales.category.grid,
+  drawTicks: true,
+  drawOnChartArea: true,
+  color: 'rgba(0, 0, 0, 0.08)',
+  lineWidth: 1,
+  // Force consistent grid line spacing
+  ticks: {
+    maxTicksLimit: 12,
+    maxRotation: 45,
+  }
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />

@@ -334,7 +334,7 @@ const SettingsView = () => {
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-              Chart Transparency: {Math.round(settings.appearance.chartTransparency * 100)}%
+              Chart Transparency: {(settings.appearance.chartTransparency * 100).toFixed(2)}%
             </label>
             <input
               type="range"
@@ -531,7 +531,7 @@ const SettingsView = () => {
                          <select
                value={settings.security.loginAttempts}
                onChange={(e) => handleSettingChange('security', 'loginAttempts', parseInt(e.target.value))}
-               className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary focus:border-transparent"
+               className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-primary focus:border-transparent"
              >
               <option value={3}>3 attempts</option>
               <option value={5}>5 attempts</option>

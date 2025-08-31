@@ -3,12 +3,13 @@ import { TrendingUp, BarChart3, PieChart, Activity } from 'lucide-react'
 import SalesChart from './SalesChart'
 import BarChart from './BarChart'
 
-
+import { useSettings } from '../contexts/SettingsContext'
 import { salesData } from '../data/dashboardData'
 import { createChartOptions, createMultiMetricOptions } from '../utils/chartOptions'
 import { createChartData, createMultiMetricData } from '../utils/chartData'
 
 const AnalyticsView = () => {
+  const { settings } = useSettings()
   const [selectedPeriod, setSelectedPeriod] = useState('month')
   const [selectedMetric, setSelectedMetric] = useState('revenue')
   const [chartType, setChartType] = useState('line')
@@ -16,23 +17,23 @@ const AnalyticsView = () => {
 
   // Memoized chart data and options
   const chartData = useMemo(() =>
-    createChartData(selectedPeriod, selectedMetric, salesData),
-    [selectedPeriod, selectedMetric, salesData]
+    createChartData(selectedPeriod, selectedMetric, salesData, settings.appearance.chartTransparency),
+    [selectedPeriod, selectedMetric, salesData, settings.appearance.chartTransparency]
   )
 
   const multiMetricData = useMemo(() =>
-    createMultiMetricData(selectedPeriod, salesData),
-    [selectedPeriod, salesData]
+    createMultiMetricData(selectedPeriod, salesData, settings.appearance.chartTransparency),
+    [selectedPeriod, salesData, settings.appearance.chartTransparency]
   )
 
   const chartOptions = useMemo(() =>
-    createChartOptions(false, selectedPeriod, selectedMetric),
-    [selectedPeriod, selectedMetric]
+    createChartOptions(false, selectedPeriod, selectedMetric, settings.appearance.showGridLines, settings.appearance.chartTransparency),
+    [selectedPeriod, selectedMetric, settings.appearance.showGridLines, settings.appearance.chartTransparency]
   )
 
   const multiMetricOptions = useMemo(() =>
-    createMultiMetricOptions(false),
-    []
+    createMultiMetricOptions(false, settings.appearance.showGridLines, settings.appearance.chartTransparency),
+    [settings.appearance.showGridLines, settings.appearance.chartTransparency]
   )
 
   // Enhanced bar data for better visualization

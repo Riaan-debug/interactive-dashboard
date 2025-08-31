@@ -2,8 +2,10 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { TrendingUp, Activity, Cpu, HardDrive, Zap, AlertTriangle, CheckCircle, Clock, Gauge } from 'lucide-react'
 import SalesChart from './SalesChart'
 import BarChart from './BarChart'
+import { useSettings } from '../contexts/SettingsContext'
 
 const PerformanceView = () => {
+  const { settings } = useSettings()
   // Performance state
   const [performanceMetrics, setPerformanceMetrics] = useState({
     fps: 60,
@@ -30,9 +32,21 @@ const PerformanceView = () => {
     if (!isMonitoring) return
 
     const interval = setInterval(() => {
+      // Generate data points that align better with grid lines
+      const fpsGridValues = [0, 20, 40, 50, 60, 70, 80];
+      const renderTimeGridValues = [0, 5, 10, 12, 15, 18, 20, 22, 25, 30];
+      
+      // Add some randomness but keep values close to grid lines
+      const baseFps = fpsGridValues[Math.floor(Math.random() * fpsGridValues.length)];
+      const baseRenderTime = renderTimeGridValues[Math.floor(Math.random() * renderTimeGridValues.length)];
+      
+      // Add small variation (±2 for FPS, ±1 for render time) to make it look natural
+      const fps = Math.max(0, Math.min(80, baseFps + (Math.random() * 4 - 2)));
+      const renderTime = Math.max(0, Math.min(30, baseRenderTime + (Math.random() * 2 - 1)));
+      
       const newMetrics = {
-        fps: Math.floor(Math.random() * 20) + 50, // 50-70 FPS
-        renderTime: Math.floor(Math.random() * 10) + 12, // 12-22ms
+        fps: fps,
+        renderTime: renderTime,
         memory: {
           used: Math.floor(Math.random() * 200) + 100, // 100-300MB
           total: 512, // 512MB limit
@@ -57,7 +71,7 @@ const PerformanceView = () => {
         const updated = [...prev, newEntry].slice(-100) // Keep last 100 entries
         return updated
       })
-    }, 1000)
+    }, 3000) // Changed from 1000ms to 3000ms for better grid alignment
 
     return () => clearInterval(interval)
   }, [isMonitoring])
@@ -123,6 +137,8 @@ const PerformanceView = () => {
         right: 20
       }
     },
+    // Add subtle background for visual structure without grid lines
+    backgroundColor: 'rgba(0, 0, 0, 0.02)',
     scales: {
       y: {
         type: 'linear',
@@ -134,6 +150,9 @@ const PerformanceView = () => {
         },
         min: 0,
         max: 80,
+        grid: {
+          display: false, // Disabled grid lines for clean appearance
+        },
         ticks: {
           padding: 8
         }
@@ -160,6 +179,9 @@ const PerformanceView = () => {
         title: {
           display: true,
           text: 'Time'
+        },
+        grid: {
+          display: false, // Disabled grid lines for clean appearance
         },
         ticks: {
           padding: 8
@@ -397,7 +419,7 @@ const PerformanceView = () => {
             </span>
           </div>
           <h3 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
-            {performanceMetrics.fps}
+            {performanceMetrics.fps.toFixed(2)}
           </h3>
           <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">Frames Per Second</p>
           <div className="w-full bg-neutral-200 dark:bg-neutral-600 rounded-full h-2">
@@ -423,7 +445,7 @@ const PerformanceView = () => {
             </span>
           </div>
           <h3 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
-            {performanceMetrics.renderTime}ms
+            {performanceMetrics.renderTime.toFixed(2)}ms
           </h3>
           <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">Render Time</p>
           <div className="w-full bg-neutral-200 dark:bg-neutral-600 rounded-full h-2">

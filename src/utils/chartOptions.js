@@ -1,4 +1,4 @@
-export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetric) => ({
+export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetric, showGridLines = true, chartTransparency = 0.8) => ({
   responsive: true,
   maintainAspectRatio: false,
   animation: {
@@ -67,9 +67,17 @@ export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetri
     y: {
       beginAtZero: true,
       grid: {
+        display: showGridLines,
         color: 'rgba(0, 0, 0, 0.08)',
         drawBorder: false,
         lineWidth: 1,
+        drawTicks: true,
+        drawOnChartArea: true,
+        // Force consistent grid line spacing with higher density
+        ticks: {
+          stepSize: undefined, // Let Chart.js calculate optimal step size
+          maxTicksLimit: 20, // Increased from 10 to 20 for better alignment
+        }
       },
       ticks: {
         color: '#64748b',
@@ -90,7 +98,17 @@ export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetri
     },
     x: {
       grid: {
-        display: false,
+        display: showGridLines,
+        color: 'rgba(0, 0, 0, 0.08)',
+        drawBorder: false,
+        lineWidth: 1,
+        drawTicks: true,
+        drawOnChartArea: true,
+        // Force consistent grid line spacing
+        ticks: {
+          maxTicksLimit: 12, // Limit number of x-axis grid lines
+          maxRotation: 45, // Prevent label overlap
+        }
       },
       ticks: {
         color: '#64748b',
@@ -108,10 +126,14 @@ export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetri
     line: {
       borderWidth: 3,
       tension: 0.4,
+      backgroundColor: `rgba(59, 130, 246, ${chartTransparency})`,
+      borderColor: `rgba(59, 130, 246, ${chartTransparency})`,
     },
     point: {
       hoverRadius: 8,
       radius: chartAnimation ? 0 : 4,
+      backgroundColor: `rgba(59, 130, 246, ${chartTransparency})`,
+      borderColor: `rgba(59, 130, 246, ${chartTransparency})`,
       animation: {
         radius: {
           duration: 1000,
@@ -120,13 +142,13 @@ export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetri
       }
     },
     bar: {
-      backgroundColor: 'rgba(59, 130, 246, 0.9)',
-      borderColor: 'rgba(59, 130, 246, 1)',
+      backgroundColor: `rgba(59, 130, 246, ${chartTransparency})`,
+      borderColor: `rgba(59, 130, 246, ${chartTransparency})`,
       borderWidth: 2,
       borderRadius: 6,
       borderSkipped: false,
-      hoverBackgroundColor: 'rgba(59, 130, 246, 1)',
-      hoverBorderColor: 'rgba(37, 99, 235, 1)',
+      hoverBackgroundColor: `rgba(59, 130, 246, ${chartTransparency})`,
+      hoverBorderColor: `rgba(37, 99, 235, ${chartTransparency})`,
       hoverBorderWidth: 3,
     }
   },
@@ -142,7 +164,7 @@ export const createChartOptions = (chartAnimation, selectedPeriod, selectedMetri
   },
 })
 
-export const createMultiMetricOptions = (chartAnimation) => ({
+export const createMultiMetricOptions = (chartAnimation, showGridLines = true, chartTransparency = 0.8) => ({
   responsive: true,
   maintainAspectRatio: false,
   animation: {
@@ -229,9 +251,17 @@ export const createMultiMetricOptions = (chartAnimation) => ({
       position: 'left',
       beginAtZero: true,
       grid: {
+        display: showGridLines,
         color: 'rgba(0, 0, 0, 0.08)',
         drawBorder: false,
         lineWidth: 1,
+        drawTicks: true,
+        drawOnChartArea: true,
+        // Force consistent grid line spacing with higher density
+        ticks: {
+          stepSize: undefined, // Let Chart.js calculate optimal step size
+          maxTicksLimit: 20, // Increased from 10 to 20 for better alignment
+        }
       },
       ticks: {
         color: '#64748b',
@@ -271,7 +301,17 @@ export const createMultiMetricOptions = (chartAnimation) => ({
     },
     x: {
       grid: {
-        display: false,
+        display: showGridLines,
+        color: 'rgba(0, 0, 0, 0.08)',
+        drawBorder: false,
+        lineWidth: 1,
+        drawTicks: true,
+        drawOnChartArea: true,
+        // Force consistent grid line spacing
+        ticks: {
+          maxTicksLimit: 12, // Limit number of x-axis grid lines
+          maxRotation: 45, // Prevent label overlap
+        }
       },
       ticks: {
         color: '#64748b',
@@ -287,10 +327,14 @@ export const createMultiMetricOptions = (chartAnimation) => ({
     line: {
       borderWidth: 3,
       tension: 0.4,
+      backgroundColor: `rgba(59, 130, 246, ${chartTransparency})`,
+      borderColor: `rgba(59, 130, 246, ${chartTransparency})`,
     },
     point: {
       hoverRadius: 8,
       radius: chartAnimation ? 0 : 4,
+      backgroundColor: `rgba(59, 130, 246, ${chartTransparency})`,
+      borderColor: `rgba(59, 130, 246, ${chartTransparency})`,
       animation: {
         radius: {
           duration: 1000,
@@ -299,13 +343,13 @@ export const createMultiMetricOptions = (chartAnimation) => ({
       }
     },
     bar: {
-      backgroundColor: 'rgba(59, 130, 246, 0.9)',
-      borderColor: 'rgba(59, 130, 246, 1)',
+      backgroundColor: `rgba(59, 130, 246, ${chartTransparency})`,
+      borderColor: `rgba(59, 130, 246, ${chartTransparency})`,
       borderWidth: 2,
       borderRadius: 6,
       borderSkipped: false,
-      hoverBackgroundColor: 'rgba(59, 130, 246, 1)',
-      hoverBorderColor: 'rgba(37, 99, 235, 1)',
+      hoverBackgroundColor: `rgba(59, 130, 246, ${chartTransparency})`,
+      hoverBorderColor: `rgba(37, 99, 235, ${chartTransparency})`,
       hoverBorderWidth: 3,
     }
   },

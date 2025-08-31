@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react'
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { TrendingUp, BarChart3, PieChart, Activity } from 'lucide-react'
 import SalesChart from './SalesChart'
 import BarChart from './BarChart'
@@ -44,14 +44,18 @@ const Dashboard = () => {
     setSelectedPeriod(settings.general.defaultPeriod)
   }, [settings.general.defaultPeriod])
 
-  // Show toast when settings change
+  // Show toast when settings change (but not on initial load)
   const [showSettingsToast, setShowSettingsToast] = useState(false)
+  const settingsRef = useRef(settings)
   
   useEffect(() => {
-    // Show toast when settings change
-    setShowSettingsToast(true)
-    const timer = setTimeout(() => setShowSettingsToast(false), 3000)
-    return () => clearTimeout(timer)
+    // Only show toast if settings actually changed (not on initial load)
+    if (settingsRef.current !== settings && JSON.stringify(settingsRef.current) !== JSON.stringify(settings)) {
+      setShowSettingsToast(true)
+      const timer = setTimeout(() => setShowSettingsToast(false), 3000)
+      return () => clearTimeout(timer)
+    }
+    settingsRef.current = settings
   }, [settings])
 
 
@@ -66,23 +70,23 @@ const Dashboard = () => {
 
   // Memoized chart data and options - made stable to prevent chart resets
   const chartData = useMemo(() =>
-    createChartData(selectedPeriod, selectedMetric, salesData),
-    [selectedPeriod, selectedMetric]
+    createChartData(selectedPeriod, selectedMetric, salesData, settings.appearance.chartTransparency),
+    [selectedPeriod, selectedMetric, salesData, settings.appearance.chartTransparency]
   )
 
   const chartOptions = useMemo(() =>
-    createChartOptions(false, selectedPeriod, selectedMetric),
-    [selectedPeriod, selectedMetric]
+    createChartOptions(false, selectedPeriod, selectedMetric, settings.appearance.showGridLines, settings.appearance.chartTransparency),
+    [selectedPeriod, selectedMetric, settings.appearance.showGridLines, settings.appearance.chartTransparency]
   )
 
   const multiMetricData = useMemo(() =>
-    createMultiMetricData(selectedPeriod, salesData),
-    [selectedPeriod]
+    createMultiMetricData(selectedPeriod, salesData, settings.appearance.chartTransparency),
+    [selectedPeriod, salesData, settings.appearance.chartTransparency]
   )
 
   const multiMetricOptions = useMemo(() =>
-    createMultiMetricOptions(false),
-    []
+    createMultiMetricOptions(false, settings.appearance.showGridLines, settings.appearance.chartTransparency),
+    [settings.appearance.showGridLines, settings.appearance.chartTransparency]
   )
 
   // Export handlers - moved here after chartData is declared
@@ -166,23 +170,23 @@ const Dashboard = () => {
       <div className={settings.general.compactMode ? 'mb-6' : 'mb-8'}>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+            <h1 className="text-heading font-bold text-neutral-900 dark:text-neutral-100 mb-2">
               Dashboard
             </h1>
-            <p className="text-neutral-600 dark:text-neutral-400">
+            <p className="text-subheading text-neutral-600 dark:text-neutral-400">
               Real-time insights and analytics overview
             </p>
           </div>
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              <p className="text-small text-neutral-500 dark:text-neutral-400">
                 Refresh Rate: {settings.general.dashboardRefreshRate}s
               </p>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              <p className="text-small text-neutral-500 dark:text-neutral-400">
                 Period: {selectedPeriod}
               </p>
               {settings.general.compactMode && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-light text-primary">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-small font-medium bg-primary-light text-primary">
                   Compact Mode
                 </span>
               )}

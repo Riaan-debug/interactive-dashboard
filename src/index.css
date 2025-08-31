@@ -8,6 +8,62 @@
   body {
     @apply bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 font-sans;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-size: var(--base-font-size);
+  }
+  
+  /* Apply font sizes globally to all text elements */
+  h1, h2, h3, h4, h5, h6 {
+    font-size: var(--heading-font-size);
+  }
+  
+  p, span, div, button, input, select, textarea, label, a {
+    font-size: var(--body-font-size);
+  }
+  
+  small, .text-xs {
+    font-size: var(--small-font-size);
+  }
+  
+  /* Additional text size rules for better coverage */
+  .text-sm {
+    font-size: var(--small-font-size);
+  }
+  
+  .text-base {
+    font-size: var(--body-font-size);
+  }
+  
+  .text-lg {
+    font-size: var(--subheading-font-size);
+  }
+  
+  .text-xl, .text-2xl, .text-3xl {
+    font-size: var(--heading-font-size);
+  }
+  
+  /* Override Tailwind text size utilities to use our custom properties */
+  .text-xs {
+    font-size: var(--small-font-size) !important;
+  }
+  
+  .text-sm {
+    font-size: var(--small-font-size) !important;
+  }
+  
+  .text-base {
+    font-size: var(--body-font-size) !important;
+  }
+  
+  .text-lg {
+    font-size: var(--subheading-font-size) !important;
+  }
+  
+  .text-xl {
+    font-size: var(--heading-font-size) !important;
+  }
+  
+  .text-2xl, .text-3xl, .text-4xl, .text-5xl, .text-6xl {
+    font-size: var(--heading-font-size) !important;
   }
   
   * {
@@ -27,6 +83,13 @@
     --primary-color-700: #1D4ED8;
     --primary-color-800: #1E40AF;
     --primary-color-900: #1E3A8A;
+    
+    /* Default font size CSS custom properties */
+    --base-font-size: 16px;
+    --heading-font-size: 20px;
+    --subheading-font-size: 18px;
+    --body-font-size: 16px;
+    --small-font-size: 14px;
   }
 }
 
@@ -391,6 +454,27 @@
   
   .border-primary-700 {
     border-color: var(--primary-color-700);
+  }
+  
+  /* Font size utilities using CSS custom properties */
+  .text-base {
+    font-size: var(--base-font-size);
+  }
+  
+  .text-heading {
+    font-size: var(--heading-font-size);
+  }
+  
+  .text-subheading {
+    font-size: var(--subheading-font-size);
+  }
+  
+  .text-body {
+    font-size: var(--body-font-size);
+  }
+  
+  .text-small {
+    font-size: var(--small-font-size);
   }
 }
 

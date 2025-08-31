@@ -30,7 +30,7 @@ const Navigation = () => {
           {/* Logo */}
           <div className="flex items-center">
             <div className="flex-shrink-0">
-                      <h1 className="text-xl font-bold text-primary">
+                      <h1 className="text-heading font-bold text-primary">
           Interactive Dashboard
         </h1>
             </div>
@@ -43,7 +43,7 @@ const Navigation = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                  className={`px-3 py-2 rounded-md text-body font-medium transition-all duration-200 ${
                     location.pathname === item.path
                       ? 'bg-primary-light text-primary'
                       : 'text-neutral-600 dark:text-neutral-300 hover:text-primary hover:bg-neutral-100 dark:hover:bg-neutral-700'
@@ -105,7 +105,7 @@ const Navigation = () => {
                 key={item.path}
                 to={item.path}
                 onClick={closeMobileMenu}
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-200 ${
+                className={`block px-3 py-2 rounded-md text-body font-medium transition-all duration-200 ${
                   location.pathname === item.path
                     ? 'bg-primary-light text-primary'
                     : 'text-neutral-600 dark:text-neutral-300 hover:text-primary hover:bg-neutral-100 dark:hover:bg-neutral-700'
