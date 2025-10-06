@@ -247,7 +247,7 @@ const AnalyticsView = () => {
 
       {/* Insights Panel */}
       <div className="mt-8 bg-gradient-to-r from-primary-light to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 rounded-xl p-6 border border-primary-200/60 dark:border-primary-700/60">
-        <h3 className="text-lg font-semibold text-primary-900 dark:text-primary-100 mb-4">
+        <h3 className="text-lg font-semibold text-primary-900 dark:text-white mb-4">
           💡 Key Insights
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -255,10 +255,10 @@ const AnalyticsView = () => {
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
               <div>
-                <p className="text-sm font-medium text-primary-800 dark:text-primary-200">
+                <p className="text-sm font-medium text-primary-800 dark:text-white">
                   Revenue Trend
                 </p>
-                <p className="text-sm text-primary-700 dark:text-primary-300">
+                <p className="text-sm text-primary-700 dark:text-gray-200">
                   {selectedPeriod === 'week' ? 'Weekly' : selectedPeriod === 'month' ? 'Monthly' : 'Yearly'} revenue shows a {selectedMetric === 'revenue' ? 'strong upward' : 'consistent'} trend
                 </p>
               </div>
@@ -266,10 +266,10 @@ const AnalyticsView = () => {
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 bg-success-500 rounded-full mt-2"></div>
               <div>
-                <p className="text-sm font-medium text-primary-800 dark:text-primary-200">
+                <p className="text-sm font-medium text-primary-800 dark:text-white">
                   Performance
                 </p>
-                <p className="text-sm text-primary-700 dark:text-primary-300">
+                <p className="text-sm text-primary-700 dark:text-gray-200">
                   Your {selectedMetric} performance is above industry benchmarks
                 </p>
               </div>
@@ -279,10 +279,10 @@ const AnalyticsView = () => {
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 bg-warning-500 rounded-full mt-2"></div>
               <div>
-                <p className="text-sm font-medium text-primary-800 dark:text-primary-200">
+                <p className="text-sm font-medium text-primary-800 dark:text-white">
                   Opportunities
                 </p>
-                <p className="text-sm text-primary-700 dark:text-primary-300">
+                <p className="text-sm text-primary-700 dark:text-gray-200">
                   Consider expanding into new markets based on current growth patterns
                 </p>
               </div>
@@ -290,10 +290,10 @@ const AnalyticsView = () => {
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 bg-danger-500 rounded-full mt-2"></div>
               <div>
-                <p className="text-sm font-medium text-primary-800 dark:text-primary-200">
+                <p className="text-sm font-medium text-primary-800 dark:text-white">
                   Recommendations
                 </p>
-                <p className="text-sm text-primary-700 dark:text-primary-300">
+                <p className="text-sm text-primary-700 dark:text-gray-200">
                   Focus on customer retention strategies to maintain growth momentum
                 </p>
               </div>

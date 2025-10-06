@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const XLSX = require('xlsx');
+const PDFDocument = require('pdfkit');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -193,19 +195,38 @@ app.post('/api/export/data', (req, res) => {
   try {
     let filename, contentType, data;
     
+    // Sample data for all exports
+    const sampleData = [
+      { Date: '2025-08-31', Revenue: 15000, Profit: 4500, Users: 1250, Orders: 89 },
+      { Date: '2025-08-30', Revenue: 14200, Profit: 4200, Users: 1180, Orders: 82 },
+      { Date: '2025-08-29', Revenue: 13800, Profit: 4100, Users: 1150, Orders: 78 },
+      { Date: '2025-08-28', Revenue: 13500, Profit: 4000, Users: 1120, Orders: 75 },
+      { Date: '2025-08-27', Revenue: 13200, Profit: 3900, Users: 1100, Orders: 72 }
+    ];
+    
     switch (format) {
       case 'excel':
         filename = `dashboard-export-${dataType}-${timestamp}.xlsx`;
         contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-        // Generate sample Excel data
-        data = 'Date,Revenue,Profit,Users,Orders\n2025-08-31,15000,4500,1250,89\n2025-08-30,14200,4200,1180,82\n2025-08-29,13800,4100,1150,78\n2025-08-28,13500,4000,1120,75\n2025-08-27,13200,3900,1100,72';
+        
+        // Create actual Excel workbook
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(sampleData);
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Dashboard Data');
+        
+        // Generate Excel buffer
+        const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+        data = excelBuffer;
         break;
         
       case 'csv':
         filename = `dashboard-export-${dataType}-${timestamp}.csv`;
         contentType = 'text/csv';
-        // Generate sample CSV data
-        data = 'Date,Revenue,Profit,Users,Orders\n2025-08-31,15000,4500,1250,89\n2025-08-30,14200,4200,1180,82\n2025-08-29,13800,4100,1150,78\n2025-08-28,13500,4000,1120,75\n2025-08-27,13200,3900,1100,72';
+        
+        // Generate CSV data
+        const csvHeaders = Object.keys(sampleData[0]).join(',');
+        const csvRows = sampleData.map(row => Object.values(row).join(','));
+        data = [csvHeaders, ...csvRows].join('\n');
         break;
         
       case 'json':
@@ -216,22 +237,69 @@ app.post('/api/export/data', (req, res) => {
           period: selectedPeriod,
           timestamp: new Date().toISOString(),
           data: {
-            dailyStats: [
-              { date: '2025-08-31', revenue: 15000, profit: 4500, users: 1250, orders: 89 },
-              { date: '2025-08-30', revenue: 14200, profit: 4200, users: 1180, orders: 82 },
-              { date: '2025-08-29', revenue: 13800, profit: 4100, users: 1150, orders: 78 },
-              { date: '2025-08-28', revenue: 13500, profit: 4000, users: 1120, orders: 75 },
-              { date: '2025-08-27', revenue: 13200, profit: 3900, users: 1100, orders: 72 }
-            ]
+            dailyStats: sampleData
           }
         }, null, 2);
         break;
+        
+      case 'pdf':
+        filename = `dashboard-export-${dataType}-${timestamp}.pdf`;
+        contentType = 'application/pdf';
+        
+        // Create actual PDF document
+        const doc = new PDFDocument();
+        const buffers = [];
+        
+        doc.on('data', buffers.push.bind(buffers));
+        doc.on('end', () => {
+          data = Buffer.concat(buffers);
+          // Send the PDF
+          res.setHeader('Content-Type', contentType);
+          res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+          res.setHeader('Content-Length', data.length);
+          res.send(data);
+        });
+        
+        // Add content to PDF
+        doc.fontSize(20).text('Dashboard Export Report', 50, 50);
+        doc.fontSize(12).text(`Data Type: ${dataType}`, 50, 100);
+        doc.text(`Period: ${selectedPeriod}`, 50, 120);
+        doc.text(`Export Date: ${new Date().toLocaleString()}`, 50, 140);
+        
+        doc.moveDown(2);
+        doc.fontSize(14).text('Sample Data:', 50, 200);
+        
+        // Add table data
+        let yPosition = 240;
+        doc.fontSize(10);
+        
+        // Headers
+        doc.text('Date', 50, yPosition);
+        doc.text('Revenue', 150, yPosition);
+        doc.text('Profit', 250, yPosition);
+        doc.text('Users', 350, yPosition);
+        doc.text('Orders', 450, yPosition);
+        
+        yPosition += 20;
+        
+        // Data rows
+        sampleData.forEach(row => {
+          doc.text(row.Date, 50, yPosition);
+          doc.text(row.Revenue.toString(), 150, yPosition);
+          doc.text(row.Profit.toString(), 250, yPosition);
+          doc.text(row.Users.toString(), 350, yPosition);
+          doc.text(row.Orders.toString(), 450, yPosition);
+          yPosition += 15;
+        });
+        
+        doc.end();
+        return; // Early return for PDF since it's handled asynchronously
         
       default:
         return res.status(400).json({ error: 'Invalid export format' });
     }
     
-    // Set headers for file download
+    // Set headers for file download (except PDF which is handled above)
     res.setHeader('Content-Type', contentType);
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.setHeader('Content-Length', Buffer.byteLength(data));

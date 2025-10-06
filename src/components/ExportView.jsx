@@ -3,10 +3,7 @@ import { Download, FileText, FileSpreadsheet, Database, Calendar, Filter, Search
 import SalesChart from './SalesChart'
 import BarChart from './BarChart'
 import DoughnutChart from './DoughnutChart'
-import * as XLSX from 'xlsx'
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
-import html2canvas from 'html2canvas'
+import { buildApiUrl } from '../config/environment'
 
 const ExportView = () => {
   // Export state
@@ -233,198 +230,17 @@ const ExportView = () => {
      }
    }), [])
 
-  // File generation functions
-  const generateExcel = useCallback((data) => {
-    // Create workbook and worksheet
-    const wb = XLSX.utils.book_new()
-    
-    // Prepare data for Excel
-    const excelData = [
-      ['Export Report', '', '', ''],
-      ['', '', '', ''],
-      ['Data Type:', dataTypes[selectedData].name, '', ''],
-      ['Date Range:', dateRanges.find(r => r.value === dateRange)?.label || dateRange, '', ''],
-      ['Export Date:', new Date().toLocaleString(), '', ''],
-      ['Total Records:', dataTypes[selectedData].recordCount.toLocaleString(), '', ''],
-      ['', '', '', ''],
-      ['Month', 'Value', 'Data Type', 'Date Range']
-    ]
-    
-    // Add data rows
-    data.labels.forEach((label, index) => {
-      excelData.push([
-        label,
-        data.datasets[0].data[index],
-        dataTypes[selectedData].name,
-        dateRanges.find(r => r.value === dateRange)?.label || dateRange
-      ])
-    })
-    
-    // Add summary statistics
-    const averageValue = data.datasets[0].data.reduce((sum, val) => sum + val, 0) / data.datasets[0].data.length
-    const maxValue = Math.max(...data.datasets[0].data)
-    const minValue = Math.min(...data.datasets[0].data)
-    
-    excelData.push(['', '', '', ''])
-    excelData.push(['Statistics', '', '', ''])
-    excelData.push(['Average Value:', averageValue.toLocaleString(), '', ''])
-    excelData.push(['Maximum Value:', maxValue.toLocaleString(), '', ''])
-    excelData.push(['Minimum Value:', minValue.toLocaleString(), '', ''])
-    excelData.push(['Data Points:', data.labels.length, '', ''])
-    
-    // Create worksheet
-    const ws = XLSX.utils.aoa_to_sheet(excelData)
-    
-    // Set column widths
-    ws['!cols'] = [
-      { width: 15 }, // Month
-      { width: 15 }, // Value
-      { width: 20 }, // Data Type
-      { width: 20 }  // Date Range
-    ]
-    
-    // Add worksheet to workbook
-    XLSX.utils.book_append_sheet(wb, ws, 'Export Data')
-    
-    // Generate Excel file as buffer
-    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
-    return excelBuffer
-  }, [selectedData, dateRange, dataTypes, dateRanges])
-
-  const generateCSV = useCallback((data) => {
-    const headers = ['Month', 'Value', 'Data Type', 'Date Range']
-    const rows = data.labels.map((label, index) => [
-      label,
-      data.datasets[0].data[index],
-      dataTypes[selectedData].name,
-      dateRanges.find(r => r.value === dateRange)?.label || dateRange
-    ])
-    
-    return [headers, ...rows]
-      .map(row => row.map(cell => `"${cell}"`).join(','))
-      .join('\n')
-  }, [selectedData, dateRange, dataTypes, dateRanges])
-
-  const generateJSON = useCallback((data) => {
-    const exportData = {
-      metadata: {
-        dataType: dataTypes[selectedData].name,
-        dateRange: dateRanges.find(r => r.value === dateRange)?.label || dateRange,
-        exportFormat: exportFormats.find(f => f.id === exportFormat)?.name || exportFormat,
-        recordCount: dataTypes[selectedData].recordCount,
-        exportDate: new Date().toISOString(),
-        filters: Object.entries(filters).filter(([_, value]) => value !== 'all')
-      },
-      chartData: data,
-      summary: {
-        totalRecords: dataTypes[selectedData].recordCount,
-        averageValue: data.datasets[0].data.reduce((sum, val) => sum + val, 0) / data.datasets[0].data.length,
-        maxValue: Math.max(...data.datasets[0].data),
-        minValue: Math.min(...data.datasets[0].data)
-      }
-    }
-    
-    return JSON.stringify(exportData, null, 2)
-  }, [selectedData, dateRange, exportFormat, filters, dataTypes, dateRanges, exportFormats])
-
-  const generatePDF = useCallback(async (data) => {
-    // Create PDF document
-    const pdf = new jsPDF('p', 'mm', 'a4')
-    
-    // Set font and colors
-    pdf.setFont('helvetica')
-    pdf.setFontSize(20)
-    pdf.setTextColor(59, 130, 246) // Blue color
-    
-    // Title
-    pdf.text('Export Report', 20, 30)
-    
-    // Reset font size and color
-    pdf.setFontSize(12)
-    pdf.setTextColor(0, 0, 0)
-    
-    // Metadata
-    pdf.text(`Data Type: ${dataTypes[selectedData].name}`, 20, 50)
-    pdf.text(`Date Range: ${dateRanges.find(r => r.value === dateRange)?.label || dateRange}`, 20, 60)
-    pdf.text(`Export Date: ${new Date().toLocaleString()}`, 20, 70)
-    pdf.text(`Total Records: ${dataTypes[selectedData].recordCount.toLocaleString()}`, 20, 80)
-    
-    // Data table header
-    pdf.setFontSize(14)
-    pdf.setTextColor(59, 130, 246)
-    pdf.text('Data Summary', 20, 100)
-    
-    // Reset font size and color
-    pdf.setFontSize(10)
-    pdf.setTextColor(0, 0, 0)
-    
-    // Create data table
-    const tableData = [['Month', 'Value']]
-    data.labels.forEach((label, index) => {
-      tableData.push([label, data.datasets[0].data[index].toLocaleString()])
-    })
-    
-         // Add table to PDF
-     autoTable(pdf, {
-       startY: 110,
-       head: [tableData[0]],
-       body: tableData.slice(1),
-       theme: 'grid',
-       headStyles: { fillColor: [59, 130, 246] },
-       margin: { top: 20 }
-     })
-    
-    // Statistics
-    const averageValue = data.datasets[0].data.reduce((sum, val) => sum + val, 0) / data.datasets[0].data.length
-    const maxValue = Math.max(...data.datasets[0].data)
-    const minValue = Math.min(...data.datasets[0].data)
-    
-         // Get the final Y position after the table (approximate)
-     const finalY = 110 + (tableData.length * 8) + 20
-    
-    pdf.setFontSize(14)
-    pdf.setTextColor(59, 130, 246)
-    pdf.text('Statistics', 20, finalY)
-    
-    pdf.setFontSize(10)
-    pdf.setTextColor(0, 0, 0)
-    pdf.text(`• Average Value: ${averageValue.toLocaleString()}`, 20, finalY + 15)
-    pdf.text(`• Maximum Value: ${maxValue.toLocaleString()}`, 20, finalY + 25)
-    pdf.text(`• Minimum Value: ${minValue.toLocaleString()}`, 20, finalY + 35)
-    pdf.text(`• Data Points: ${data.labels.length}`, 20, finalY + 45)
-    
-    // Footer
-    pdf.setFontSize(8)
-    pdf.setTextColor(128, 128, 128)
-    pdf.text('Report generated by ExportView', 20, 280)
-    
-    return pdf
-  }, [selectedData, dateRange, dataTypes, dateRanges])
 
 
 
-  // Download function
-  const downloadFile = useCallback((content, filename, mimeType) => {
-    let blob
-    
-    // Handle different content types
-    if (content instanceof Blob) {
-      blob = content
-    } else if (content instanceof ArrayBuffer) {
-      blob = new Blob([content], { type: mimeType })
-    } else {
-      blob = new Blob([content], { type: mimeType })
-    }
-    
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = filename
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    window.URL.revokeObjectURL(url)
-  }, [])
+
+
+
+
+
+
+
+
 
   // Export history data
   const filteredExportHistory = useMemo(() => {
@@ -437,39 +253,45 @@ const ExportView = () => {
     )
   }, [exportHistory, searchTerm])
 
-  // Handle export
+  // Handle export using backend API
   const handleExport = useCallback(async () => {
     setIsExporting(true)
     
     try {
-      // Generate file content based on export format
-      let fileContent, filename, mimeType, fileSize
+      // Map export format to backend format
+      const backendFormat = exportFormat === 'excel' ? 'excel' : 
+                           exportFormat === 'csv' ? 'csv' : 
+                           exportFormat === 'json' ? 'json' : 
+                           exportFormat === 'pdf' ? 'pdf' : 'excel'
       
-      if (exportFormat === 'excel') {
-        fileContent = generateExcel(previewChartData)
-        filename = `${selectedData}_${dateRange}_${new Date().toISOString().split('T')[0]}.xlsx`
-        mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        fileSize = fileContent.byteLength
-      } else if (exportFormat === 'csv') {
-        fileContent = generateCSV(previewChartData)
-        filename = `${selectedData}_${dateRange}_${new Date().toISOString().split('T')[0]}.csv`
-        mimeType = 'text/csv'
-        fileSize = new Blob([fileContent]).size
-      } else if (exportFormat === 'json') {
-        fileContent = generateJSON(previewChartData)
-        filename = `${selectedData}_${dateRange}_${new Date().toISOString().split('T')[0]}.json`
-        mimeType = 'application/json'
-        fileSize = new Blob([fileContent]).size
-      } else if (exportFormat === 'pdf') {
-        const pdf = await generatePDF(previewChartData)
-        fileContent = pdf.output('blob')
-        filename = `${selectedData}_${dateRange}_${new Date().toISOString().split('T')[0]}.pdf`
-        mimeType = 'application/pdf'
-        fileSize = fileContent.size
+      // Send request to backend
+      const response = await fetch(buildApiUrl('/export/data'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          format: backendFormat,
+          dataType: `export-${selectedData}`,
+          selectedPeriod: dateRange
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Export failed')
       }
+
+      // Get the file from backend
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
       
-      // Download the file
-      downloadFile(fileContent, filename, mimeType)
+      // Generate filename
+      const filename = `${selectedData}_${dateRange}_${new Date().toISOString().split('T')[0]}.${backendFormat === 'excel' ? 'xlsx' : backendFormat}`
+      link.download = filename
+      link.click()
+      window.URL.revokeObjectURL(url)
       
       // Create export history entry
       const newExport = {
@@ -481,7 +303,7 @@ const ExportView = () => {
         recordCount: dataTypes[selectedData].recordCount,
         status: 'completed',
         timestamp: new Date().toISOString(),
-        size: fileSize
+        size: blob.size
       }
       
       setExportHistory(prev => [newExport, ...prev])
@@ -494,7 +316,7 @@ const ExportView = () => {
     } finally {
       setIsExporting(false)
     }
-  }, [selectedData, exportFormat, dateRange, previewChartData, generateExcel, generateCSV, generateJSON, generatePDF, downloadFile, dataTypes, exportFormats])
+  }, [selectedData, exportFormat, dateRange, previewChartData, dataTypes, exportFormats, filters])
 
   // Delete export from history
   const deleteExport = useCallback((exportId) => {

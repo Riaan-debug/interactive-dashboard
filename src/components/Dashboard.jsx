@@ -16,7 +16,7 @@ import { stats, activities, salesData, barData, doughnutData } from '../data/das
 import { createChartOptions, createMultiMetricOptions } from '../utils/chartOptions'
 import { createChartData, createMultiMetricData } from '../utils/chartData'
 
-import { exportToExcel as exportExcelUtil, exportToPDF as exportPdfUtil, exportToJSON as exportJsonUtil } from '../utils/exportFunctions'
+import { buildApiUrl } from '../config/environment'
 
 
 
@@ -89,11 +89,33 @@ const Dashboard = () => {
     [settings.appearance.showGridLines, settings.appearance.chartTransparency]
   )
 
-  // Export handlers - moved here after chartData is declared
+  // Export handlers - using backend API
   const handleExportExcel = useCallback(async () => {
     setIsExporting(true)
     try {
-      await exportExcelUtil(selectedPeriod, selectedMetric, salesData, { current: setIsExporting }, { current: setShowExportOptions })
+      const response = await fetch(buildApiUrl('/export/data'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          format: 'excel',
+          dataType: 'sales-analytics',
+          selectedPeriod: selectedPeriod
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Export failed')
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `sales-analytics-${selectedPeriod}-${selectedMetric}.xlsx`
+      link.click()
+      window.URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Export failed:', error)
     } finally {
@@ -105,7 +127,29 @@ const Dashboard = () => {
   const handleExportPDF = useCallback(async () => {
     setIsExporting(true)
     try {
-      await exportPdfUtil(selectedPeriod, selectedMetric, salesData, { current: setIsExporting }, { current: setShowExportOptions })
+      const response = await fetch(buildApiUrl('/export/data'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          format: 'pdf',
+          dataType: 'sales-analytics',
+          selectedPeriod: selectedPeriod
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Export failed')
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `sales-analytics-${selectedPeriod}-${selectedMetric}.pdf`
+      link.click()
+      window.URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Export failed:', error)
     } finally {
@@ -117,7 +161,29 @@ const Dashboard = () => {
   const handleExportJSON = useCallback(async () => {
     setIsExporting(true)
     try {
-      await exportJsonUtil(selectedPeriod, selectedMetric, salesData, { current: setIsExporting }, { current: setShowExportOptions })
+      const response = await fetch(buildApiUrl('/export/data'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          format: 'json',
+          dataType: 'sales-analytics',
+          selectedPeriod: selectedPeriod
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Export failed')
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `sales-analytics-${selectedPeriod}-${selectedMetric}.json`
+      link.click()
+      window.URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Export failed:', error)
     } finally {
@@ -131,38 +197,207 @@ const Dashboard = () => {
   const handleBarExportExcel = useCallback(async () => {
     setIsBarExporting(true)
     try {
-      await exportExcelUtil(selectedPeriod, selectedMetric, salesData, { current: setIsBarExporting }, { current: setShowBarExportOptions })
+      const response = await fetch(buildApiUrl('/export/data'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          format: 'excel',
+          dataType: 'quarterly-performance',
+          selectedPeriod: selectedPeriod
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Export failed')
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `quarterly-performance-${selectedPeriod}-${selectedMetric}.xlsx`
+      link.click()
+      window.URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Bar chart export failed:', error)
     } finally {
       setIsBarExporting(false)
       setShowBarExportOptions(false)
     }
-  }, [selectedPeriod, selectedMetric, salesData])
+  }, [selectedPeriod, selectedMetric, barData])
 
   const handleBarExportPDF = useCallback(async () => {
     setIsBarExporting(true)
     try {
-      await exportPdfUtil(selectedPeriod, selectedMetric, salesData, { current: setIsBarExporting }, { current: setShowBarExportOptions })
+      const response = await fetch(buildApiUrl('/export/data'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          format: 'pdf',
+          dataType: 'quarterly-performance',
+          selectedPeriod: selectedPeriod
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Export failed')
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `quarterly-performance-${selectedPeriod}-${selectedMetric}.pdf`
+      link.click()
+      window.URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Bar chart export failed:', error)
     } finally {
       setIsBarExporting(false)
       setShowBarExportOptions(false)
     }
-  }, [selectedPeriod, selectedMetric, salesData])
+  }, [selectedPeriod, selectedMetric, barData])
 
   const handleBarExportJSON = useCallback(async () => {
     setIsBarExporting(true)
     try {
-      await exportJsonUtil(selectedPeriod, selectedMetric, salesData, { current: setIsBarExporting }, { current: setShowBarExportOptions })
+      const response = await fetch(buildApiUrl('/export/data'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          format: 'json',
+          dataType: 'quarterly-performance',
+          selectedPeriod: selectedPeriod
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Export failed')
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `quarterly-performance-${selectedPeriod}-${selectedMetric}.json`
+      link.click()
+      window.URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Bar chart export failed:', error)
     } finally {
       setIsBarExporting(false)
       setShowBarExportOptions(false)
     }
-  }, [selectedPeriod, selectedMetric, salesData])
+  }, [selectedPeriod, selectedMetric, barData])
+
+  // Device Usage (Doughnut) export handlers
+  const handleDoughnutExportExcel = useCallback(async () => {
+    setIsExporting(true)
+    try {
+      const response = await fetch(buildApiUrl('/export/data'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          format: 'excel',
+          dataType: 'device-usage',
+          selectedPeriod: selectedPeriod
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Export failed')
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `device-usage-${selectedPeriod}-${selectedMetric}.xlsx`
+      link.click()
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Device usage export failed:', error)
+    } finally {
+      setIsExporting(false)
+      setShowExportOptions(false)
+    }
+  }, [selectedPeriod, selectedMetric, doughnutData])
+
+  const handleDoughnutExportPDF = useCallback(async () => {
+    setIsExporting(true)
+    try {
+      const response = await fetch(buildApiUrl('/export/data'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          format: 'pdf',
+          dataType: 'device-usage',
+          selectedPeriod: selectedPeriod
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Export failed')
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `device-usage-${selectedPeriod}-${selectedMetric}.pdf`
+      link.click()
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Device usage export failed:', error)
+    } finally {
+      setIsExporting(false)
+      setShowExportOptions(false)
+    }
+  }, [selectedPeriod, selectedMetric, doughnutData])
+
+  const handleDoughnutExportJSON = useCallback(async () => {
+    setIsExporting(true)
+    try {
+      const response = await fetch(buildApiUrl('/export/data'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          format: 'json',
+          dataType: 'device-usage',
+          selectedPeriod: selectedPeriod
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Export failed')
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `device-usage-${selectedPeriod}-${selectedMetric}.json`
+      link.click()
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Device usage export failed:', error)
+    } finally {
+      setIsExporting(false)
+      setShowExportOptions(false)
+    }
+  }, [selectedPeriod, selectedMetric, doughnutData])
 
   return (
     <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${settings.general.compactMode ? 'py-6' : 'py-8'}`}>
@@ -252,9 +487,9 @@ const Dashboard = () => {
           iconColor="info"
           showControls={true}
           showExport={true}
-          onExportExcel={handleExportExcel}
-          onExportPDF={handleExportPDF}
-          onExportJSON={handleExportJSON}
+          onExportExcel={handleDoughnutExportExcel}
+          onExportPDF={handleDoughnutExportPDF}
+          onExportJSON={handleDoughnutExportJSON}
         />
 
         {/* Activity Feed */}

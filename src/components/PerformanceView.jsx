@@ -513,10 +513,10 @@ const PerformanceView = () => {
       {/* Performance Summary */}
       <div className="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-xl p-6 border border-primary-200/60 dark:border-primary-700/60 mb-8">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-primary-900 dark:text-primary-100">
+          <h3 className="text-lg font-semibold text-primary-900 dark:text-white">
             📊 Performance Summary
           </h3>
-          <div className="text-sm text-primary-700 dark:text-primary-300">
+          <div className="text-sm text-primary-700 dark:text-gray-200">
             {filteredPerformanceHistory.length} data points • {selectedTimeframe} timeframe
           </div>
         </div>
@@ -525,25 +525,25 @@ const PerformanceView = () => {
             <div className="text-2xl font-bold text-primary dark:text-primary">
               {filteredPerformanceHistory.length > 0 ? Math.round(filteredPerformanceHistory.reduce((sum, entry) => sum + entry.fps, 0) / filteredPerformanceHistory.length) : 0}
             </div>
-            <div className="text-sm text-primary-700 dark:text-primary-300">Avg FPS</div>
+            <div className="text-sm text-primary-700 dark:text-gray-200">Avg FPS</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-primary dark:text-primary">
               {filteredPerformanceHistory.length > 0 ? Math.round(filteredPerformanceHistory.reduce((sum, entry) => sum + entry.renderTime, 0) / filteredPerformanceHistory.length) : 0}ms
             </div>
-            <div className="text-sm text-primary-700 dark:text-primary-300">Avg Render Time</div>
+            <div className="text-sm text-primary-700 dark:text-gray-200">Avg Render Time</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-primary dark:text-primary">
               {filteredPerformanceHistory.length > 0 ? Math.round(filteredPerformanceHistory.reduce((sum, entry) => sum + entry.cpu, 0) / filteredPerformanceHistory.length) : 0}%
             </div>
-            <div className="text-sm text-primary-700 dark:text-primary-300">Avg CPU Usage</div>
+            <div className="text-sm text-primary-700 dark:text-gray-200">Avg CPU Usage</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-primary dark:text-primary">
               {filteredPerformanceHistory.length > 0 ? Math.round(filteredPerformanceHistory.reduce((sum, entry) => sum + entry.memory.used, 0) / filteredPerformanceHistory.length) : 0}MB
             </div>
-            <div className="text-sm text-primary-700 dark:text-primary-300">Avg Memory</div>
+            <div className="text-sm text-primary-700 dark:text-gray-200">Avg Memory</div>
           </div>
         </div>
       </div>
@@ -623,7 +623,7 @@ const PerformanceView = () => {
 
       {/* Performance Insights */}
       <div className="bg-gradient-to-r from-primary-light to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 rounded-xl p-6 border border-primary-200/60 dark:border-primary-700/60">
-        <h3 className="text-lg font-semibold text-primary-900 dark:text-primary-100 mb-4">
+        <h3 className="text-lg font-semibold text-primary-900 dark:text-white mb-4">
           💡 Performance Insights
         </h3>
         <div className="space-y-3">
@@ -634,7 +634,7 @@ const PerformanceView = () => {
                 <div className={`w-2 h-2 rounded-full mt-2 ${insight.color.replace('text-', 'bg-')}`}></div>
                 <div className="flex items-center gap-2">
                   <Icon className={`w-4 h-6 ${insight.color}`} />
-                  <p className="text-sm text-primary-800 dark:text-primary-200">
+                  <p className="text-sm text-primary-800 dark:text-white">
                     {insight.message}
                   </p>
                 </div>
