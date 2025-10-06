@@ -333,19 +333,19 @@ app.get('/api/settings/backup', (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Backend server running on port ${PORT}`);
-  console.log(`📊 Database: ${dbPath}`);
-  console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
+  console.log(`Backend server running on port ${PORT}`);
+  console.log(`Database: ${dbPath}`);
+  console.log(`Health check: http://localhost:${PORT}/api/health`);
 });
 
 // Graceful shutdown
 process.on('SIGINT', () => {
-  console.log('\n🛑 Shutting down server...');
+  console.log('\nShutting down server...');
   db.close((err) => {
     if (err) {
       console.error('Error closing database:', err);
     } else {
-      console.log('✅ Database connection closed');
+      console.log('Database connection closed');
     }
     process.exit(0);
   });

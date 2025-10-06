@@ -98,7 +98,7 @@ const AnalyticsView = () => {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
-          📈 Advanced Analytics
+          Advanced Analytics
         </h1>
         <p className="text-neutral-600 dark:text-neutral-400">
           Deep dive into your business metrics with advanced visualization and insights
@@ -248,7 +248,7 @@ const AnalyticsView = () => {
       {/* Insights Panel */}
       <div className="mt-8 bg-gradient-to-r from-primary-light to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 rounded-xl p-6 border border-primary-200/60 dark:border-primary-700/60">
         <h3 className="text-lg font-semibold text-primary-900 dark:text-white mb-4">
-          💡 Key Insights
+          Key Insights
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-3">

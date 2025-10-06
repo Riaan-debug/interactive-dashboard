@@ -1,13 +1,13 @@
-# 🚀 Production Deployment Guide
+# Production Deployment Guide
 
-## **🔒 Security Overview**
+## **Security Overview**
 
 This application automatically switches between development and production security settings:
 
 - **Development**: Relaxed CSP, Vite proxy, local backend
 - **Production**: Strict CSP, proper CORS, secure headers
 
-## **🌍 Deployment Options**
+## **Deployment Options**
 
 ### **Option 1: Same-Origin Deployment (Recommended)**
 ```bash
@@ -45,7 +45,7 @@ Backend: https://api.yourdomain.com
 - Environment variables set
 - Strict CSP policies
 
-## **⚙️ Environment Variables**
+## **Environment Variables**
 
 ### **Frontend (.env.production)**
 ```bash
@@ -60,7 +60,7 @@ PORT=3000
 CORS_ORIGIN=https://dashboard.yourdomain.com
 ```
 
-## **🔧 Production Build Commands**
+## **Production Build Commands**
 
 ```bash
 # Frontend
@@ -70,7 +70,7 @@ npm run build
 NODE_ENV=production npm start
 ```
 
-## **🛡️ Security Features**
+## **Security Features**
 
 ### **Automatic Security Switching**
 - **Development**: Relaxed CSP for local development
@@ -87,7 +87,7 @@ NODE_ENV=production npm start
 - Strict-Transport-Security: max-age=31536000
 - Content-Security-Policy: Strict in production
 
-## **📊 Monitoring & Logging**
+## **Monitoring & Logging**
 
 ### **Backend Logging**
 ```javascript
@@ -104,7 +104,7 @@ if (process.env.NODE_ENV === 'production') {
 curl https://yourdomain.com/api/health
 ```
 
-## **🚨 Security Checklist**
+## **Security Checklist**
 
 - [ ] HTTPS enabled
 - [ ] Environment variables set
@@ -117,7 +117,7 @@ curl https://yourdomain.com/api/health
 - [ ] CSRF protection
 - [ ] Error handling (no sensitive data exposed)
 
-## **🔍 Testing Production Security**
+## **Testing Production Security**
 
 ```bash
 # Test CSP headers
@@ -130,7 +130,7 @@ curl -H "Origin: https://malicious-site.com" \
      -X OPTIONS https://yourdomain.com/api/backup/create
 ```
 
-## **📚 Additional Resources**
+## **Additional Resources**
 
 - [OWASP Security Guidelines](https://owasp.org/www-project-top-ten/)
 - [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)

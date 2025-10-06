@@ -8,11 +8,11 @@ const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
   const navItems = [
-    { path: '/', label: 'Dashboard', icon: '📊' },
-    { path: '/analytics', label: 'Analytics', icon: '📈' },
-    { path: '/performance', label: 'Performance', icon: '⚡' },
-    { path: '/export', label: 'Export', icon: '📤' },
-    { path: '/settings', label: 'Settings', icon: '⚙️' }
+    { path: '/', label: 'Dashboard' },
+    { path: '/analytics', label: 'Analytics' },
+    { path: '/performance', label: 'Performance' },
+    { path: '/export', label: 'Export' },
+    { path: '/settings', label: 'Settings' }
   ]
 
   const toggleMobileMenu = () => {
@@ -49,7 +49,6 @@ const Navigation = () => {
                       : 'text-neutral-600 dark:text-neutral-300 hover:text-primary hover:bg-neutral-100 dark:hover:bg-neutral-700'
                   }`}
                 >
-                  <span className="mr-2">{item.icon}</span>
                   {item.label}
                 </Link>
               ))}
@@ -111,7 +110,6 @@ const Navigation = () => {
                     : 'text-neutral-600 dark:text-neutral-300 hover:text-primary hover:bg-neutral-100 dark:hover:bg-neutral-700'
                 }`}
               >
-                <span className="mr-2">{item.icon}</span>
                 {item.label}
               </Link>
             ))}

@@ -1,71 +1,109 @@
 # Interactive Analytics Dashboard
 
-A professional, interactive business intelligence dashboard built with React and modern web technologies. This dashboard demonstrates advanced data visualization, responsive design, and modern UI/UX patterns.
+A professional, interactive business intelligence dashboard built with React and modern web technologies. This dashboard demonstrates advanced data visualization, responsive design, and modern UI/UX patterns with full backend integration.
 
-## 🚀 Features
+## Features
 
-### **Data Visualization**
+### Data Visualization
 - **Interactive Charts**: Line, bar, and doughnut charts with Chart.js
 - **Real-time Updates**: Dynamic data filtering and period selection
 - **Responsive Charts**: Optimized for all screen sizes
+- **Customizable Display**: Grid lines toggle and chart transparency controls
 
-### **Business Intelligence**
+### Business Intelligence
 - **KPI Metrics**: Sales, users, conversion rates, and orders tracking
 - **Period Filtering**: Week, month, and year views
 - **Performance Indicators**: Trend analysis with visual indicators
+- **Performance Monitoring**: Real-time FPS, render time, CPU, and memory tracking
 
-### **Modern UI/UX**
-- **Clean Design**: Professional, business-ready interface
+### Modern UI/UX
+- **Dynamic Theming**: Customizable primary color system
+- **Font Size Controls**: Small, medium, and large text options
+- **Dark/Light Mode**: Full theme support with proper contrast
 - **Responsive Layout**: Mobile-first design approach
 - **Interactive Elements**: Hover effects, transitions, and smooth animations
-- **Color-coded Metrics**: Intuitive visual hierarchy
+- **Settings Persistence**: User preferences saved across sessions
 
-## 🛠️ Tech Stack
+### Backend Integration
+- **Node.js API**: Express server with SQLite database
+- **Data Export**: Real Excel (.xlsx), PDF, CSV, and JSON file generation
+- **Backup System**: Automated backup creation and history tracking
+- **Security**: CORS configuration, CSP headers, and proper error handling
 
-- **Frontend Framework**: React 18 with modern hooks
-- **Charts & Visualization**: Chart.js with React wrappers
+## Tech Stack
+
+### Frontend
+- **Framework**: React 18 with modern hooks and context API
+- **Charts**: Chart.js with React wrappers
 - **Styling**: Tailwind CSS for utility-first styling
 - **Icons**: Lucide React for modern iconography
 - **Build Tool**: Vite for fast development and building
-- **Responsive Design**: Mobile-first, cross-device compatibility
+- **State Management**: React Context for global settings
 
-## 📊 Dashboard Components
+### Backend
+- **Runtime**: Node.js with Express framework
+- **Database**: SQLite for data persistence
+- **File Generation**: XLSX and PDFKit libraries
+- **Security**: CORS middleware and security headers
 
-### **Statistics Cards**
+## Dashboard Components
+
+### Statistics Cards
 - Total Sales with trend indicators
 - User growth metrics
 - Conversion rate analysis
-- Order tracking
+- Order tracking with animated counters
 
-### **Interactive Charts**
+### Interactive Charts
 - **Sales Overview**: Line chart with period filtering
 - **Revenue Analysis**: Quarterly bar chart
 - **Device Usage**: Doughnut chart for platform distribution
+- **Performance Metrics**: Real-time monitoring charts
 
-### **Activity Feed**
-- Real-time business activities
-- Transaction monitoring
-- User engagement tracking
+### Settings & Configuration
+- **Appearance Settings**: Primary color selection and font size controls
+- **Chart Settings**: Grid lines and transparency controls
+- **Notification Preferences**: Email alerts, push notifications, reports
+- **Data Management**: Backup settings and export preferences
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js (version 16 or higher)
-- npm or yarn package manager
+- npm package manager
 
 ### Installation
 
-1. **Install dependencies**:
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Riaan-debug/interactive-dashboard.git
+   cd interactive-dashboard
+   ```
+
+2. **Install frontend dependencies**:
    ```bash
    npm install
    ```
 
-2. **Start development server**:
+3. **Install backend dependencies**:
+   ```bash
+   cd backend
+   npm install
+   cd ..
+   ```
+
+4. **Start the backend server**:
+   ```bash
+   cd backend
+   npm start
+   ```
+
+5. **Start the frontend development server** (in a new terminal):
    ```bash
    npm run dev
    ```
 
-3. **Open your browser**:
+6. **Open your browser**:
    Navigate to `http://localhost:3052`
 
 ### Build for Production
@@ -76,87 +114,114 @@ npm run build
 
 This creates a `dist` folder with your production-ready dashboard.
 
-## 🎯 Perfect for Your Portfolio
+## Project Structure
 
-### **Why This Dashboard Will Impress Employers:**
+```
+interactive-dashboard/
+├── src/
+│   ├── components/          # React components
+│   ├── contexts/           # React context providers
+│   ├── data/              # Mock data and configurations
+│   ├── hooks/             # Custom React hooks
+│   ├── utils/             # Utility functions
+│   └── main.jsx           # Application entry point
+├── backend/
+│   ├── server.js          # Express server
+│   ├── package.json       # Backend dependencies
+│   └── database.sqlite    # SQLite database
+├── public/                # Static assets
+└── package.json           # Frontend dependencies
+```
 
-1. **Real-World Application**: Looks like an actual business dashboard companies use
-2. **Advanced Data Visualization**: Shows understanding of complex data presentation
-3. **Professional Design**: Clean, corporate-ready interface
-4. **Interactive Features**: Demonstrates user experience skills
-5. **Responsive Design**: Shows mobile-first thinking
-6. **Modern Technologies**: Uses the same stack companies are hiring for
+## Key Features Demonstrated
 
-### **Skills Demonstrated:**
+### Technical Skills
+- **React Development**: Modern hooks, context API, component architecture
+- **Data Visualization**: Interactive charts with Chart.js
+- **Backend Integration**: Node.js API with database operations
+- **File Generation**: Real Excel and PDF export functionality
+- **State Management**: Global settings with persistence
+- **Security**: CORS, CSP headers, and error handling
 
-- ✅ **React Development**: Modern hooks, state management, component architecture
-- ✅ **Data Visualization**: Charts, graphs, statistics presentation
-- ✅ **Modern CSS**: Tailwind CSS, responsive design, animations
-- ✅ **User Experience**: Interactive elements, filtering, responsive behavior
-- ✅ **Business Intelligence**: KPI tracking, metrics, analytics
-- ✅ **Professional UI**: Clean, corporate design sensibility
+### Design & UX
+- **Dynamic Theming**: CSS custom properties for color theming
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+- **Accessibility**: Proper contrast ratios and keyboard navigation
+- **User Experience**: Intuitive settings and smooth animations
+- **Professional UI**: Clean, corporate-ready interface
 
-## 🔧 Customization
+### Business Intelligence
+- **KPI Tracking**: Sales, users, conversion rates, orders
+- **Performance Monitoring**: Real-time system metrics
+- **Data Export**: Multiple format support for reporting
+- **Backup Management**: Automated data protection
 
-### **Data Sources**
+## Customization
+
+### Data Sources
 - Replace mock data with real API endpoints
 - Connect to your own data sources
-- Add real-time data streaming
+- Add real-time data streaming with WebSockets
 
-### **Branding**
-- Update color scheme to match your brand
+### Branding
+- Update color scheme using the dynamic theming system
 - Customize chart colors and themes
 - Add your company logo and styling
 
-### **Additional Features**
-- Add more chart types (pie charts, area charts)
+### Additional Features
+- Add more chart types (pie charts, area charts, heatmaps)
 - Implement real-time data updates
-- Add export functionality (PDF, CSV)
-- Include user authentication
+- Add user authentication and authorization
+- Include advanced analytics and reporting
 
-## 📱 Responsive Design
+## Deployment
 
-The dashboard is built with a mobile-first approach:
-- **Desktop**: Full-featured dashboard with all charts visible
-- **Tablet**: Optimized layout for medium screens
-- **Mobile**: Stacked layout with touch-friendly interactions
-
-## 🚀 Deployment
-
-### **Vercel (Recommended)**
+### Frontend (Vercel)
 1. Push your code to GitHub
 2. Connect your repository to Vercel
 3. Deploy automatically on every push
 
-### **Netlify**
-1. Build your project: `npm run build`
-2. Drag the `dist` folder to Netlify
-3. Configure your domain
+### Backend (Railway/Heroku)
+1. Set up environment variables
+2. Configure database connection
+3. Deploy with proper CORS settings
 
-### **GitHub Pages**
-1. Build your project: `npm run build`
-2. Use the `gh-pages` package to deploy
+### Full Stack (Same Domain)
+1. Build frontend: `npm run build`
+2. Serve static files from Express
+3. Deploy as a single application
 
-## 💡 Next Steps
+## Development
 
-1. **Customize**: Add your branding and color scheme
-2. **Extend**: Add more chart types and data sources
-3. **Deploy**: Get it online so employers can see it
-4. **Document**: Add to your portfolio with descriptions
-5. **Iterate**: Keep improving based on feedback
+### Available Scripts
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `cd backend && npm start` - Start backend server
+- `cd backend && npm run dev` - Start backend with nodemon
 
-## 🎉 You're Ready!
+### Environment Configuration
+- Frontend runs on port 3052
+- Backend runs on port 3001
+- Vite proxy configured for API requests
+- CORS enabled for development
 
-With this interactive dashboard, you now have a portfolio piece that demonstrates:
+## Contributing
 
-- **Technical Skills**: Advanced React development and data visualization
-- **Design Sense**: Professional, business-ready UI/UX
-- **Problem Solving**: Complex data presentation and user interaction
-- **Attention to Detail**: Polished, production-ready code
-- **Business Understanding**: Real-world application development
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-This dashboard will make you stand out to employers and show them exactly what you're capable of building!
+## License
+
+This project is open source and available under the MIT License.
+
+## Support
+
+For questions or support, please open an issue on GitHub or contact the maintainer.
 
 ---
 
-**Good luck with your web development career! 🚀**
+**Professional Interactive Dashboard - Built with React, Node.js, and modern web technologies**

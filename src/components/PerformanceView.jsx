@@ -356,7 +356,7 @@ const PerformanceView = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
-              ⚡ Performance Monitoring
+              Performance Monitoring
             </h1>
             <p className="text-neutral-600 dark:text-neutral-400">
               Real-time system performance metrics and optimization insights
@@ -514,7 +514,7 @@ const PerformanceView = () => {
       <div className="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-xl p-6 border border-primary-200/60 dark:border-primary-700/60 mb-8">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-primary-900 dark:text-white">
-            📊 Performance Summary
+            Performance Summary
           </h3>
           <div className="text-sm text-primary-700 dark:text-gray-200">
             {filteredPerformanceHistory.length} data points • {selectedTimeframe} timeframe
@@ -624,7 +624,7 @@ const PerformanceView = () => {
       {/* Performance Insights */}
       <div className="bg-gradient-to-r from-primary-light to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 rounded-xl p-6 border border-primary-200/60 dark:border-primary-700/60">
         <h3 className="text-lg font-semibold text-primary-900 dark:text-white mb-4">
-          💡 Performance Insights
+          Performance Insights
         </h3>
         <div className="space-y-3">
           {performanceInsights.map((insight, index) => {

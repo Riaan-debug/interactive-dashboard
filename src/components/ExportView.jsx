@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useRef } from 'react'
-import { Download, FileText, FileSpreadsheet, Database, Calendar, Filter, Search, Eye, Trash2, RefreshCw, CheckCircle, AlertCircle, Clock, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react'
+import { Download, FileText, FileSpreadsheet, Database, Calendar, Filter, Search, Eye, Trash2, RefreshCw, CheckCircle, AlertCircle, Clock, ZoomIn, ZoomOut, RotateCcw, BarChart3, FolderOpen, History } from 'lucide-react'
 import SalesChart from './SalesChart'
 import BarChart from './BarChart'
 import DoughnutChart from './DoughnutChart'
@@ -34,28 +34,24 @@ const ExportView = () => {
     sales: {
       name: 'Sales Data',
       description: 'Revenue, transactions, and customer analytics',
-      icon: '📊',
       recordCount: 15420,
       lastUpdated: '2 hours ago'
     },
     analytics: {
       name: 'Analytics Data',
       description: 'Performance metrics and user behavior insights',
-      icon: '📈',
       recordCount: 8920,
       lastUpdated: '1 hour ago'
     },
     performance: {
       name: 'Performance Data',
       description: 'System metrics and optimization data',
-      icon: '⚡',
       recordCount: 5670,
       lastUpdated: '30 minutes ago'
     },
     users: {
       name: 'User Data',
       description: 'User profiles, activity, and engagement metrics',
-      icon: '👥',
       recordCount: 12340,
       lastUpdated: '3 hours ago'
     }
@@ -380,7 +376,7 @@ const ExportView = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
-              📤 Export Your Data
+              Export Your Data
             </h1>
             <p className="text-neutral-600 dark:text-neutral-400">
               Export your data in multiple formats with advanced filtering and preview capabilities
@@ -417,7 +413,7 @@ const ExportView = () => {
               className="w-full p-6 text-left flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <span className="text-2xl">📊</span>
+                <BarChart3 className="w-6 h-6 text-primary" />
                 <div>
                   <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                     Data Type
@@ -457,7 +453,6 @@ const ExportView = () => {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-lg">{data.icon}</span>
                         <span className="font-medium text-neutral-900 dark:text-neutral-100">
                           {data.name}
                         </span>
@@ -483,7 +478,7 @@ const ExportView = () => {
               className="w-full p-6 text-left flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <span className="text-2xl">📁</span>
+                <FolderOpen className="w-6 h-6 text-primary" />
                 <div>
                   <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                     Export Format
@@ -548,7 +543,7 @@ const ExportView = () => {
               className="w-full p-6 text-left flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <span className="text-2xl">📅</span>
+                <Calendar className="w-6 h-6 text-primary" />
                 <div>
                   <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                     Date Range & Filters
@@ -638,7 +633,7 @@ const ExportView = () => {
           <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-enterprise border border-neutral-200/60 dark:border-neutral-700/60 p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                👁️ Data Preview
+                Data Preview
               </h3>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
@@ -710,7 +705,7 @@ const ExportView = () => {
           <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-enterprise border border-neutral-200/60 dark:border-neutral-700/60 p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                📋 Export History
+                Export History
               </h3>
               <div className="flex items-center gap-2">
                 <Search className="w-4 h-4 text-neutral-400" />
